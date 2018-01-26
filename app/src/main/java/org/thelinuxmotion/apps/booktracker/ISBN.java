@@ -15,15 +15,18 @@ public class ISBN {
         this.mIsbn = mIsbn;
     }
 
-    public ArrayList<Integer> getmIsbn() {
-        return mIsbn;
+    public ArrayList<Integer> getIsbn() {
+       // if(!mIsbn.isEmpty())
+            return mIsbn;
+
+
     }
 
 
     public boolean setIsbn(ISBN isbn) {
 
-        if( checkISBN(isbn.getmIsbn()) ){
-            this.mIsbn = isbn.getmIsbn();
+        if( checkISBN(isbn.getIsbn()) ){
+            this.mIsbn = isbn.getIsbn();
             return true;
         }
         return false;
@@ -36,31 +39,39 @@ public class ISBN {
         return false;
     }
 
-    boolean checkISBN(ArrayList<Integer> mIsbn){
+    static boolean checkISBN(ArrayList<Integer> isbn){
 
 
-        ArrayList<Integer> isbn = new ArrayList<Integer>();
+        ArrayList<Integer> nisbn = new ArrayList<Integer>();
         // If the array is a 2007 or ealier array convert
         // it to the 13 digit isbn number
-        if (mIsbn.size() == 10){
+        if( (isbn.size() != 10) && (isbn.size() != 13) )
+            return false;
 
-            isbn.add(9);
-            isbn.add(7);
-            isbn.add(8);
+        if (isbn.size() == 10){
+
+            nisbn.add(9);
+            nisbn.add(7);
+            nisbn.add(8);
 
         }
+        for(int i = 0; i < isbn.size(); i ++)
+            nisbn.add(isbn.get(i));
         //If true return that the number is correct
 
         int sum1 = 0, sum3 = 0;
 
-        for(int i = 0; i < 6; i++){
-            sum1 += isbn.get(i);
-            sum3 += (3*isbn.get(i));
+        for(int i = 0; i < 12; i++){
+            sum1 += nisbn.get(i);
+            sum3 += (3*nisbn.get(i+1));
+            i++;
         }
 
-        int checkDigit = 10 - ((sum1 + sum3)%10);
+        int tsum = sum1 + sum3;
+        int msum = ((tsum)%10);
+        int checkDigit = 10 - msum;
         // Check the last digit and the check digit
-        if(checkDigit == isbn.get(13))
+        if(checkDigit == nisbn.get(12))
             return true;
         // if the check digits dindt match
         // say so
