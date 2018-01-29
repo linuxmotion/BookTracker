@@ -1,63 +1,51 @@
 package org.thelinuxmotion.apps.booktracker;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.support.v4.app.FragmentActivity;
+import android.widget.Toast;
 
-import java.util.ArrayList;
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends FragmentActivity implements BookShelfFragment.OnFragmentInteractionListener, AddBookDialogFragment.OnAddBookDialogListener {
+    BookShelfFragment mBookShelf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mBookShelf = (BookShelfFragment) getSupportFragmentManager().findFragmentById(R.id.bookShelf);
 
-        final CheckBox validISBN = (CheckBox) findViewById(R.id.validationBox);
-        final EditText enterISBN = (EditText) findViewById(R.id.editText);
-        Button   cancel    = (Button)   findViewById(R.id.cancelButton);
-        Button   enter     = (Button)   findViewById(R.id.enterButton);
+    }
 
-        enter.setOnClickListener(new View.OnClickListener(){
+    @Override
+    public void onFragmentInteraction(Uri uri) {
 
-            @Override
-            public void onClick(View v) {
-                String isbn = enterISBN.getText().toString();
-                StringBuilder sb;
-                ArrayList<Integer> aisbn = new ArrayList<>();
-                for(int i = 0; i < isbn.length(); i++){
-                    sb = new StringBuilder();
-                    // convert to int
-                    //String ch;
-                    sb.append(isbn.charAt(i));
-                    aisbn.add(Integer.parseInt(sb.toString()));
-                }
+    }
 
-                if(ISBN.checkISBN(aisbn)) {
-                    validISBN.setChecked(true);
-                }else{
-                    validISBN.setChecked(false);
-                }
+    @Override
+    public void onDialogPositiveClick(AddBookDialogFragment dialog) {
 
-                //
-                //ISBN bookISBN = new ISBN(aisbn);
-                //Book book = new Book(0,100, bookISBN);
+        boolean validISBN = ISBN.isValidISBN(dialog.getISBN().getText().toString());
+        Context context = this.getApplicationContext();
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast;
+        mBookShelf.setIsValidISBN(validISBN);
 
-            }
-         }
+        if (validISBN) {
+            CharSequence text = "Valid ISBN";
+            toast = Toast.makeText(context, text, duration);
 
-
-        );
-
-        //findViewById(R.id.);
-        ArrayList<Integer> isbn = new ArrayList<>(10);
-        Book oneBook = new Book(0,0,isbn);
+        } else {
+            CharSequence text = "Invalid ISBN";
+            toast = Toast.makeText(context, text, duration);
+        }
+        toast.show();
 
     }
 
 
+    @Override
+    public void onDialogNegativeClick(AddBookDialogFragment dialog) {
+
+    }
 }
