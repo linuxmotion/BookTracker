@@ -3,10 +3,13 @@ package org.thelinuxmotion.apps.booktracker;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
-public class MainActivity extends FragmentActivity implements BookShelfFragment.OnFragmentInteractionListener, AddBookDialogFragment.OnAddBookDialogListener {
+public class MainActivity extends AppCompatActivity implements BookShelfFragment.OnFragmentInteractionListener, AddBookDialogFragment.OnAddBookDialogListener {
     BookShelfFragment mBookShelf;
 
     @Override
@@ -14,7 +17,9 @@ public class MainActivity extends FragmentActivity implements BookShelfFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mBookShelf = (BookShelfFragment) getSupportFragmentManager().findFragmentById(R.id.bookShelf);
-
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        //getSupportActionBar().hide();
     }
 
     @Override
@@ -47,5 +52,24 @@ public class MainActivity extends FragmentActivity implements BookShelfFragment.
     @Override
     public void onDialogNegativeClick(AddBookDialogFragment dialog) {
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.appbarmenu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add:
+                Toast.makeText(this, "Add book from here", Toast.LENGTH_LONG).show();
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 }

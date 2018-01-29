@@ -7,4 +7,6 @@
     <string name="enter">Enter</string>
     <string name="cancel">Cancel</string>
     <string name="enter_isbn">Enter ISBN</string>
+    <string name="s_add_book">Add book</string>
+    <string name="action_settings">action settings</string>
 </resources>
