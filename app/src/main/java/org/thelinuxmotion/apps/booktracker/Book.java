@@ -15,6 +15,12 @@ public class Book {
 
        this(totalNumPages,pagesCompleted,new ISBN(isbn));
     }
+
+    public Book(int totalNumPages, int pagesCompleted, String isbn) {
+        this.mTotalNumPages = totalNumPages;
+        this.mPagesCompleted = pagesCompleted;
+        this.mISBN = new ISBN(isbn);
+    }
     public Book(int totalNumPages, int pagesCompleted, ISBN isbn) {
         this.mTotalNumPages = totalNumPages;
         this.mPagesCompleted = pagesCompleted;

@@ -12,10 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import java.util.ArrayList;
-
-/*
- * A simple {@link Fragment} subclass.
+/**
+ * A dialog to prompt the user to enter an the isbn of a book, the
+ * number of pages completed, and the number of pages that the book contains.
+ * It will then pass the data to the {@link BookShelfFragment} through
+ * the main activity if the user selects to enter the isbn.
+ * <p>
+ * <p>
  * Activities that contain this fragment must implement the
  * {@link AddBookDialogFragment.OnAddBookDialogListener} interface
  * to handle interaction events.
@@ -28,7 +31,7 @@ public class AddBookDialogFragment extends DialogFragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private ArrayList<Book> mBooksList;
+    //private ArrayList<Book> mBooksList;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -37,10 +40,11 @@ public class AddBookDialogFragment extends DialogFragment {
     private OnAddBookDialogListener mListener;
 
     private EditText mEnterISBN;
+    private EditText mEnterPagesCompleted;
+    private EditText mEnterPagesTotal;
 
 
     public AddBookDialogFragment() {
-        mBooksList = new ArrayList<>();
         // Required empty public constructor
     }
 
@@ -66,25 +70,23 @@ public class AddBookDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
+        final View fields = inflater.inflate(R.layout.fragment_add_book_dialog, null);
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
-        builder.setView(inflater.inflate(R.layout.fragment_add_book_dialog, null))
+        builder.setView(fields)
                 // Add action buttons
                 .setPositiveButton(R.string.enter, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
                         mListener.onDialogPositiveClick(AddBookDialogFragment.this);
-                        // AddBookDialogFragment.this.getDialog().dismiss();
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         mListener.onDialogNegativeClick(AddBookDialogFragment.this);
-                        //AddBookDialogFragment.this.getDialog().cancel();
                     }
                 });
 
@@ -109,12 +111,10 @@ public class AddBookDialogFragment extends DialogFragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_add_book_dialog, container, false);
 
-        // mValidISBN = (CheckBox) v.findViewById(R.id.validationBox);
-        mEnterISBN = (EditText) v.findViewById(R.id.editText);
-        // mCancelButton   = (Button)   v.findViewById(R.id.cancelButton);
-        // mEnterButton     = (Button)   v.findViewById(R.id.enterButton);
-        // mEnterButton.setOnClickListener(new EnterOnclickListener());
 
+        mEnterISBN = (EditText) v.findViewById(R.id.editISBN);
+        mEnterPagesCompleted = (EditText) v.findViewById(R.id.editPagesCompleted);
+        mEnterPagesTotal = (EditText) v.findViewById(R.id.editPagesTotal);
         return v;
     }
 
@@ -136,26 +136,18 @@ public class AddBookDialogFragment extends DialogFragment {
         mListener = null;
     }
 
-    public EditText getISBN() {
-        return mEnterISBN;
+    public static String getISBN(AddBookDialogFragment d) {
+        return ((EditText) d.getView().findViewById(R.id.editISBN)).getText().toString();
     }
 
-    public ArrayList<Book> getmBooksList() {
-        return mBooksList;
+    public static String getEnterPagesCompleted(Dialog d) {
+        return ((EditText) d.findViewById(R.id.editPagesCompleted)).getText().toString();
     }
 
-    public void setBooksList(ArrayList<Book> mBooksList) {
-        this.mBooksList = mBooksList;
+    public static String getEnterPagesTotal(Dialog d) {
+        return ((EditText) d.findViewById(R.id.editPagesTotal)).getText().toString();
     }
 
-    public void addBooktoList(ISBN isbn) {
-
-        this.mBooksList.add(new Book(0, 0, isbn));
-    }
-
-    public void addBooktoList(Book book) {
-        this.mBooksList.add(book);
-    }
 
     /**
      * This interface must be implemented by activities that contain this

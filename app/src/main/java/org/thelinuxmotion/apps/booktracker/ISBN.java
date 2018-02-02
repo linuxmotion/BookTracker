@@ -1,9 +1,11 @@
 package org.thelinuxmotion.apps.booktracker;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 
 /**
- * Created by jweyr on 1/25/2018.
+ * Contains the data for a ISBN. Contains methods to validate ISBN's
  */
 
 public class ISBN {
@@ -13,9 +15,10 @@ public class ISBN {
     public ISBN(ArrayList<Integer> mIsbn) {
         this.mIsbn = mIsbn;
     }
-
+    public ISBN(String isbn) {
+        this.mIsbn = toIntegerArray(isbn);
+    }
     public ArrayList<Integer> getIsbn() {
-        // if(!mIsbn.isEmpty())
         return mIsbn;
 
     }
@@ -37,6 +40,7 @@ public class ISBN {
         return false;
     }
 
+    public static boolean DEBUG = true;
     /**
      * @param isbn raw string of the isbn
      * @return whether the isbn that was passed into it is a
@@ -44,9 +48,20 @@ public class ISBN {
      */
     public static boolean isValidISBN(String isbn) {
 
+        //DEBUG SET TO TRUE ALWAYS
+        if(DEBUG)
+            return true;
+
         if (isbn.length() != 10 && isbn.length() != 13)
             return false;
 
+        ArrayList<Integer> aisbn = toIntegerArray(isbn);
+        return ISBN.checkISBN(aisbn);
+
+    }
+
+    @NonNull
+    public static ArrayList<Integer> toIntegerArray(String isbn) {
         StringBuilder sb;
         ArrayList<Integer> aisbn = new ArrayList<>();
         for (int i = 0; i < isbn.length(); i++) {
@@ -56,8 +71,7 @@ public class ISBN {
             sb.append(isbn.charAt(i));
             aisbn.add(Integer.parseInt(sb.toString()));
         }
-        return ISBN.checkISBN(aisbn);
-
+        return aisbn;
     }
 
     private static boolean checkISBN(ArrayList<Integer> isbn) {

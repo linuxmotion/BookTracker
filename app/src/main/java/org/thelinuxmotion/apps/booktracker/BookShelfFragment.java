@@ -7,12 +7,17 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
+import android.widget.GridView;
+
+import java.util.ArrayList;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * The main bookshelf. All book are loaded into the shelf to display
+ * to the user. Receives the ISBN, completed pages number, and total
+ * page number. Should validation a ISBN before intitating
+ * a query to a ISBN database and adding the new book into the bookshelf.
+ * <p>
  * Activities that contain this fragment must implement the
  * {@link BookShelfFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
@@ -25,18 +30,21 @@ public class BookShelfFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+
+   // private ArrayList<Book> mBooksList;
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
+    private OnBookShelfInteractionListener mListener;
 
-    private CheckBox mValidISBN;
-    private Button mShowButton;
+    private GridView mBookShelfGrid;
+    private BookAdapter mBookAdapter;
 
 
     public BookShelfFragment() {
-        // Required empty public constructor
+
     }
 
     /**
@@ -71,36 +79,42 @@ public class BookShelfFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_book_shelf, container, false);
-
-        mValidISBN = (CheckBox) v.findViewById(R.id.validISBN);
-        mShowButton = (Button) v.findViewById(R.id.showButton);
-        mShowButton.setOnClickListener(new View.OnClickListener() {
-
-
-            @Override
-            public void onClick(View view) {
-                AddBookDialogFragment dialog = new AddBookDialogFragment();
-                dialog.show(getFragmentManager(), "Add book");
-            }
-        });
-
+        mBookShelfGrid = v.findViewById(R.id.book_shelf_grid);
+        mBookShelfGrid.setAdapter(mBookAdapter);
 
         return v;
     }
 
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        ArrayList<Book> books = new ArrayList<Book>();
+
+        //Add four dummy books to the shelf
+        books.add(new Book(0,10, "1234567890123"));
+        books.add(new Book(0,15, "9876543210987"));
+        books.add(new Book(0,30, "8901234567890"));
+        books.add(new Book(0,50, "1234342342344"));
+        //TODO: Retrieve the books from a persistent storage to restore the state
+        //Add the books that are on the current shelf
+        mBookAdapter.add(books);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        //TODO: Save the books to a persistent storage to save the shelf state
+
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnBookShelfInteractionListener) {
+            mListener = (OnBookShelfInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -113,8 +127,9 @@ public class BookShelfFragment extends Fragment {
         mListener = null;
     }
 
-    public void setIsValidISBN(boolean isChecked) {
-        this.mValidISBN.setChecked(isChecked);
+    public void addBooktoShelf(Book book) {
+
+        mBookAdapter.add(book);
     }
 
 
@@ -128,8 +143,8 @@ public class BookShelfFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    public interface OnBookShelfInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void OnBookShelfInteraction(Uri uri);
     }
 }

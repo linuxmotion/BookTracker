@@ -1,15 +1,14 @@
 package org.thelinuxmotion.apps.booktracker;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.widget.EditText;
 
-public class MainActivity extends AppCompatActivity implements BookShelfFragment.OnFragmentInteractionListener, AddBookDialogFragment.OnAddBookDialogListener {
+public class MainActivity extends AppCompatActivity implements BookShelfFragment.OnBookShelfInteractionListener, AddBookDialogFragment.OnAddBookDialogListener {
     BookShelfFragment mBookShelf;
 
     @Override
@@ -19,32 +18,44 @@ public class MainActivity extends AppCompatActivity implements BookShelfFragment
         mBookShelf = (BookShelfFragment) getSupportFragmentManager().findFragmentById(R.id.bookShelf);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-        //getSupportActionBar().hide();
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
     }
 
     @Override
     public void onDialogPositiveClick(AddBookDialogFragment dialog) {
 
-        boolean validISBN = ISBN.isValidISBN(dialog.getISBN().getText().toString());
-        Context context = this.getApplicationContext();
-        int duration = Toast.LENGTH_SHORT;
-        Toast toast;
-        mBookShelf.setIsValidISBN(validISBN);
+
+        String isbn = ((EditText) dialog.getDialog().findViewById(R.id.editISBN)).getText().toString();
+        android.util.Log.v("ISBN: ", isbn);
+        boolean validISBN = ISBN.isValidISBN(isbn);
 
         if (validISBN) {
-            CharSequence text = "Valid ISBN";
-            toast = Toast.makeText(context, text, duration);
+
+            String completed =
+                    ((EditText) dialog.getDialog().findViewById(R.id.editPagesCompleted)).getText().toString();
+            String total =
+                    ((EditText) dialog.getDialog().findViewById(R.id.editPagesTotal)).getText().toString();
+
+            //TODO: Remove when done testing book adding system. We should never reach here with a empty isbn
+            {
+                if (isbn.isEmpty())//If we got here we are probably testing the book adding system
+                    isbn = "123456789012";// this is a dummy value
+            }
+
+            // If the fields are blank just set them to zero
+            if (completed.isEmpty())
+                completed = "0";
+            if (total.isEmpty())
+                total = "0";
+            int t = Integer.parseInt(total);
+            int c = Integer.parseInt(completed);
+            Book b = new Book(t, c, isbn);
+            mBookShelf.addBooktoShelf(b);
 
         } else {
-            CharSequence text = "Invalid ISBN";
-            toast = Toast.makeText(context, text, duration);
+            CharSequence text = "Please enter a valid ISBN";
+            //toast = Toast.makeText(context, text, duration);
         }
-        toast.show();
+        //toast.show();
 
     }
 
@@ -64,12 +75,20 @@ public class MainActivity extends AppCompatActivity implements BookShelfFragment
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_add:
-                Toast.makeText(this, "Add book from here", Toast.LENGTH_LONG).show();
-                break;
+            case R.id.action_add: {
+                AddBookDialogFragment dialog = AddBookDialogFragment.newInstance("", "");
+                dialog.show(getSupportFragmentManager(), "Add book");
+
+            }
+            break;
             default:
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void OnBookShelfInteraction(Uri uri) {
+
     }
 }
