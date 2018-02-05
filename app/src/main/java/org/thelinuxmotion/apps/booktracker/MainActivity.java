@@ -8,8 +8,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 
+/**
+ * Main activity. Handles the bookshelf fragment as well
+ * as the book dialogs. The handling of the UI for a single
+ * book and no the entire shelf should be done in its own
+ * activity or fragment and dynamically envoked
+ *
+ */
 public class MainActivity extends AppCompatActivity implements BookShelfFragment.OnBookShelfInteractionListener, AddBookDialogFragment.OnAddBookDialogListener {
     BookShelfFragment mBookShelf;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements BookShelfFragment
         mBookShelf = (BookShelfFragment) getSupportFragmentManager().findFragmentById(R.id.bookShelf);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+
     }
 
     @Override
@@ -49,7 +58,9 @@ public class MainActivity extends AppCompatActivity implements BookShelfFragment
             int t = Integer.parseInt(total);
             int c = Integer.parseInt(completed);
             Book b = new Book(t, c, isbn);
+
             mBookShelf.addBooktoShelf(b);
+
 
         } else {
             CharSequence text = "Please enter a valid ISBN";

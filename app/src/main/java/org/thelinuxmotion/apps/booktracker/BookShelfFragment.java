@@ -1,15 +1,21 @@
 package org.thelinuxmotion.apps.booktracker;
 
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 
+import org.thelinuxmotion.apps.booktracker.persistence.AppDataBase;
+import org.thelinuxmotion.apps.booktracker.persistence.BookDBEntry;
+
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -19,7 +25,7 @@ import java.util.ArrayList;
  * a query to a ISBN database and adding the new book into the bookshelf.
  * <p>
  * Activities that contain this fragment must implement the
- * {@link BookShelfFragment.OnFragmentInteractionListener} interface
+ * {@link BookShelfFragment.OnBookShelfInteractionListener} interface
  * to handle interaction events.
  * Use the {@link BookShelfFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -31,7 +37,7 @@ public class BookShelfFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
 
-   // private ArrayList<Book> mBooksList;
+    // private ArrayList<Book> mBooksList;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -42,9 +48,11 @@ public class BookShelfFragment extends Fragment {
     private GridView mBookShelfGrid;
     private BookAdapter mBookAdapter;
 
+    private AppDataBase mDb;
+
 
     public BookShelfFragment() {
-
+        //mBookAdapter = new BookAdapter();
     }
 
     /**
@@ -72,6 +80,13 @@ public class BookShelfFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        ArrayList<Book> books = new ArrayList<Book>();
+        mDb = Room.databaseBuilder(getContext(),
+                AppDataBase.class, "book").allowMainThreadQueries().build();
+
+
+        if (mBookAdapter == null)
+            mBookAdapter = new BookAdapter(this.getContext(), books);
     }
 
     @Override
@@ -86,21 +101,21 @@ public class BookShelfFragment extends Fragment {
     }
 
 
-
     @Override
     public void onResume() {
         super.onResume();
 
-        ArrayList<Book> books = new ArrayList<Book>();
-
-        //Add four dummy books to the shelf
-        books.add(new Book(0,10, "1234567890123"));
-        books.add(new Book(0,15, "9876543210987"));
-        books.add(new Book(0,30, "8901234567890"));
-        books.add(new Book(0,50, "1234342342344"));
         //TODO: Retrieve the books from a persistent storage to restore the state
+        //TODO: Move DB access to a separate thread
         //Add the books that are on the current shelf
-        mBookAdapter.add(books);
+        List<BookDBEntry> entries = mDb.bookDao().getAll();
+        ArrayList<Book> shelf = new ArrayList<>(entries.size());
+
+        for (BookDBEntry entry : entries) {
+          shelf.add(Book.getInstanceFromDBEntry(entry));
+        }
+        mBookAdapter.add(shelf);
+
     }
 
     @Override
@@ -128,7 +143,10 @@ public class BookShelfFragment extends Fragment {
     }
 
     public void addBooktoShelf(Book book) {
-
+        Log.v("addBookToShelf", "Adding book to the list");
+       //TODO: Move saving into a separate non UI thread
+        BookDBEntry dbb = BookDBEntry.getDBEntryInstanceFromBook(book);
+        mDb.bookDao().add(dbb);
         mBookAdapter.add(book);
     }
 

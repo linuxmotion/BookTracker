@@ -1,62 +1,65 @@
 package org.thelinuxmotion.apps.booktracker;
 
-import java.util.ArrayList;
+import org.thelinuxmotion.apps.booktracker.persistence.BookDBEntry;
 
 /**
- * Created by jweyr on 1/25/2018.
+ * Holds the information about a book. The isbn, pages read
+ * and total pages the the book contains.
+ * When updating the total number of pages read, the date
+ * and time will be recorded into a persistent database
+ * by the ISBN of the book
  */
-
 public class Book {
+
+    private String mISBN;
 
     private int mTotalNumPages;
     private int mPagesCompleted;
-    private ISBN mISBN;
-    public Book(int totalNumPages, int pagesCompleted, ArrayList<Integer> isbn) {
 
-       this(totalNumPages,pagesCompleted,new ISBN(isbn));
-    }
 
-    public Book(int totalNumPages, int pagesCompleted, String isbn) {
-        this.mTotalNumPages = totalNumPages;
-        this.mPagesCompleted = pagesCompleted;
-        this.mISBN = new ISBN(isbn);
-    }
-    public Book(int totalNumPages, int pagesCompleted, ISBN isbn) {
-        this.mTotalNumPages = totalNumPages;
-        this.mPagesCompleted = pagesCompleted;
+    public Book(int pages_total, int pages_completed, String isbn) {
+        this.mTotalNumPages = pages_total;
+        this.mPagesCompleted = pages_completed;
         this.mISBN = isbn;
     }
 
-    public int getPagesCompleted() {
-        return mPagesCompleted;
+    public static Book getInstanceFromDBEntry(BookDBEntry entry){
+
+        return new Book(entry.mTotalNumPages,
+                        entry.mPagesCompleted,
+                        entry.ISBN);
     }
 
     public void setPagesCompleted(int pagesCompleted) {
+
         this.mPagesCompleted = pagesCompleted;
     }
 
-    public ISBN getISBN() {
-        return mISBN;
-    }
-    public boolean setISBN(ArrayList isbn) {
+    public boolean setISBN(String isbn) {
 
-        return mISBN.setIsbn(isbn);
+        mISBN = isbn;
+        return ISBN.isValidISBN(mISBN);
     }
-    public boolean setISBN(ISBN isbn) {
 
-        return mISBN.setIsbn(isbn);
+    public void setTotalNumPages(int totalNumPages) {
+
+        this.mTotalNumPages = totalNumPages;
+    }
+
+    public int getPagesCompleted() {
+
+        return mPagesCompleted;
     }
 
     public int getTotalNumPages() {
         return mTotalNumPages;
     }
 
-    public void setTotalNumPages(int totalNumPages) {
-        this.mTotalNumPages = totalNumPages;
+
+    public String getmISBN() {
+
+        return mISBN;
     }
-
-
-
 
 
 }

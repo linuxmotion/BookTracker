@@ -17,7 +17,9 @@ public class BookAdapter extends ArrayAdapter<Book> {
 
    // ArrayList<Book> mBookList;
 
-
+    public BookAdapter(Context context, List books) {
+        this(context, R.id.editISBN, books);
+    }
 
     public BookAdapter(Context context, int resource, List books) {
         super(context, resource, books);
@@ -43,10 +45,14 @@ public class BookAdapter extends ArrayAdapter<Book> {
         return imageView;
     }
 
+
+
+
+
     public void add(List<Book> objects) {
         for (Book obj: objects) {
             add(obj);
-        };
+        }
 
     }
 }
