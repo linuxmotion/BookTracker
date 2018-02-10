@@ -37,6 +37,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
             imageView.setLayoutParams(new GridView.LayoutParams(213, 300));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setPadding(8, 8, 8, 16);
+            imageView.setFocusable(false);
         } else {
             imageView = (ImageView) convertView;
         }

@@ -2,6 +2,7 @@ package org.thelinuxmotion.apps.booktracker;
 
 import android.arch.persistence.room.Room;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,7 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import org.thelinuxmotion.apps.booktracker.persistence.AppDataBase;
 import org.thelinuxmotion.apps.booktracker.persistence.BookDBEntry;
@@ -49,7 +52,29 @@ public class BookShelfFragment extends Fragment {
     private BookAdapter mBookAdapter;
 
     private AppDataBase mDb;
+    private BookClickedListener mBookClickedListener;
 
+    public class BookClickedListener implements AdapterView.OnItemClickListener {
+
+
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+            Log.v("clickEvent", "Grid item was clicked");
+            Toast.makeText(adapterView.getContext(), "Item " + i + " cliecked. ISBN: ?", Toast.LENGTH_SHORT).show();
+
+
+            Intent intent = new Intent(adapterView.getContext().getApplicationContext(), BookActivity.class);
+            //EditText editText = (EditText) findViewById(R.id.editText);
+           // String message = editText.getText().toString();
+            Book b = mBookAdapter.getItem(i);
+            intent.putExtra(BookFragment.ARG_ISBN, b.getmISBN());
+            startActivity(intent);
+
+
+        }
+
+    }
 
     public BookShelfFragment() {
         //mBookAdapter = new BookAdapter();
@@ -80,13 +105,31 @@ public class BookShelfFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        ArrayList<Book> books = new ArrayList<Book>();
-        mDb = Room.databaseBuilder(getContext(),
+
+
+        //TODO: Move DB access to a separate thread
+        // Open the database
+        mDb = Room.databaseBuilder(this.getActivity().getApplicationContext(),
                 AppDataBase.class, "book").allowMainThreadQueries().build();
+        // get all entries
+        List<BookDBEntry> entries = mDb.bookDao().getAll();
+        ArrayList<Book> shelf = new ArrayList<>(entries.size());
 
+        // Turn each DB object into the adapter object
+        for (BookDBEntry entry : entries) {
+            shelf.add(Book.getInstanceFromDBEntry(entry));
 
+        }
+        // If this is the first time create the adapter
         if (mBookAdapter == null)
-            mBookAdapter = new BookAdapter(this.getContext(), books);
+            mBookAdapter = new BookAdapter(this.getActivity().getApplicationContext(), shelf);
+        // create the shelf
+        //mBookAdapter.add(shelf);
+        if (mBookClickedListener == null)
+            mBookClickedListener = new BookClickedListener();
+
+
+
     }
 
     @Override
@@ -95,7 +138,14 @@ public class BookShelfFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_book_shelf, container, false);
         mBookShelfGrid = v.findViewById(R.id.book_shelf_grid);
+        mBookShelfGrid.setFocusable(false);
         mBookShelfGrid.setAdapter(mBookAdapter);
+        mBookShelfGrid.setFocusableInTouchMode(false);
+        mBookShelfGrid.setClickable(true);
+
+
+        mBookShelfGrid.setOnItemClickListener(mBookClickedListener);
+
 
         return v;
     }
@@ -105,16 +155,8 @@ public class BookShelfFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        //TODO: Retrieve the books from a persistent storage to restore the state
-        //TODO: Move DB access to a separate thread
-        //Add the books that are on the current shelf
-        List<BookDBEntry> entries = mDb.bookDao().getAll();
-        ArrayList<Book> shelf = new ArrayList<>(entries.size());
+        // If we were not restarted load from the database
 
-        for (BookDBEntry entry : entries) {
-          shelf.add(Book.getInstanceFromDBEntry(entry));
-        }
-        mBookAdapter.add(shelf);
 
     }
 
@@ -144,7 +186,7 @@ public class BookShelfFragment extends Fragment {
 
     public void addBooktoShelf(Book book) {
         Log.v("addBookToShelf", "Adding book to the list");
-       //TODO: Move saving into a separate non UI thread
+        //TODO: Move saving into a separate non UI thread
         BookDBEntry dbb = BookDBEntry.getDBEntryInstanceFromBook(book);
         mDb.bookDao().add(dbb);
         mBookAdapter.add(book);

@@ -9,4 +9,10 @@
     <string name="enter_isbn">Enter ISBN</string>
     <string name="s_add_book">Add book</string>
     <string name="action_settings">action settings</string>
+    <string name="book_name">Book name</string>
+    <string name="book_isbn">ISBN for book</string>
+    <string name="display_pages_both">Pages completed/Pages total</string>
+    <string name="add_entry_button">Add Entry</string>
+    <string name="book_image_desc">Image of book</string>
+    <string name="display_pages_both_desc">Displays numerical value of pages completed and pages total</string>
 </resources>
