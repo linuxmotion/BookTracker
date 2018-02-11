@@ -8,6 +8,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 
+import org.thelinuxmotion.apps.booktracker.bookinfo.Book;
+import org.thelinuxmotion.apps.booktracker.bookinfo.ISBN;
+import org.thelinuxmotion.apps.booktracker.fragments.AddBookDialogFragment;
+import org.thelinuxmotion.apps.booktracker.fragments.BookShelfFragment;
+
 /**
  * Main activity. Handles the bookshelf fragment as well
  * as the book dialogs. The handling of the UI for a single
@@ -57,8 +62,9 @@ public class MainActivity extends AppCompatActivity implements BookShelfFragment
                 total = "0";
             int t = Integer.parseInt(total);
             int c = Integer.parseInt(completed);
-            Book b = new Book(t, c, isbn);
 
+            Book b = getBookfromOnlineDB(isbn);
+            // add the filled book
             mBookShelf.addBooktoShelf(b);
 
 
@@ -68,6 +74,14 @@ public class MainActivity extends AppCompatActivity implements BookShelfFragment
         }
         //toast.show();
 
+    }
+
+    public Book getBookfromOnlineDB(String isbn) {
+        //TODO: Query the book by ISBN from an online DB and fill in the info for the book
+        // for now just create a book from the ISBN
+         Book b = new Book();
+         b.setISBN(isbn);
+         return b;
     }
 
 

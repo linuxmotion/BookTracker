@@ -1,4 +1,4 @@
-package org.thelinuxmotion.apps.booktracker;
+package org.thelinuxmotion.apps.booktracker.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.thelinuxmotion.apps.booktracker.R;
 import org.thelinuxmotion.apps.booktracker.persistence.AppDataBase;
 
 /**

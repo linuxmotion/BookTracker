@@ -5,6 +5,8 @@ import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
+import org.thelinuxmotion.apps.booktracker.bookinfo.Book;
+
 import java.util.List;
 
 /**
@@ -14,15 +16,15 @@ import java.util.List;
 @Dao
 public interface BookDBdao {
 
-    @Query("SELECT * FROM Book")
-    List<BookDBEntry> getAll();
+    @Query("SELECT * FROM main_bookshelf")
+    List<Book> getAll();
 
     @Insert
-    void insertAll(BookDBEntry... books);
+    void insertAll(Book... books);
 
     @Insert
-    void add(BookDBEntry book);
+    void add(Book book);
 
     @Delete
-    void delete(BookDBEntry user);
+    void delete(Book user);
 }

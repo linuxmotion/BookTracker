@@ -1,4 +1,4 @@
-package org.thelinuxmotion.apps.booktracker;
+package org.thelinuxmotion.apps.booktracker.adapters;
 
 import android.content.Context;
 import android.view.View;
@@ -6,6 +6,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+
+import org.thelinuxmotion.apps.booktracker.bookinfo.Book;
+import org.thelinuxmotion.apps.booktracker.R;
 
 import java.util.List;
 

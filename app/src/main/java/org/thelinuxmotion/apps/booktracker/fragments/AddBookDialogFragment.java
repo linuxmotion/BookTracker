@@ -1,4 +1,4 @@
-package org.thelinuxmotion.apps.booktracker;
+package org.thelinuxmotion.apps.booktracker.fragments;
 
 
 import android.app.AlertDialog;
@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+
+import org.thelinuxmotion.apps.booktracker.R;
 
 /**
  * A dialog to prompt the user to enter an the isbn of a book, the

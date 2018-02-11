@@ -7,6 +7,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import org.thelinuxmotion.apps.booktracker.fragments.BookFragment;
+
 /**
  * Created by jweyr on 2/8/2018.
  */

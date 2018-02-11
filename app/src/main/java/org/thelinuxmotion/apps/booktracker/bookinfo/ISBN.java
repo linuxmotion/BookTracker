@@ -1,4 +1,4 @@
-package org.thelinuxmotion.apps.booktracker;
+package org.thelinuxmotion.apps.booktracker.bookinfo;
 
 /**
  * Contains the data for a ISBN. Contains methods to validate ISBN's
