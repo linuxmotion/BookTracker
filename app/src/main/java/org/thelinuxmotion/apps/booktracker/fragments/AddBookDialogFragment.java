@@ -42,8 +42,8 @@ public class AddBookDialogFragment extends DialogFragment {
     private OnAddBookDialogListener mListener;
 
     private EditText mEnterISBN;
-    private EditText mEnterPagesCompleted;
-    private EditText mEnterPagesTotal;
+    //private EditText mEnterPagesCompleted;
+   // private EditText mEnterPagesTotal;
 
 
     public AddBookDialogFragment() {
@@ -115,8 +115,8 @@ public class AddBookDialogFragment extends DialogFragment {
 
 
         mEnterISBN = (EditText) v.findViewById(R.id.editISBN);
-        mEnterPagesCompleted = (EditText) v.findViewById(R.id.editPagesCompleted);
-        mEnterPagesTotal = (EditText) v.findViewById(R.id.editPagesTotal);
+       // mEnterPagesCompleted = (EditText) v.findViewById(R.id.editPagesCompleted);
+       // mEnterPagesTotal = (EditText) v.findViewById(R.id.editPagesTotal);
         return v;
     }
 
@@ -142,13 +142,13 @@ public class AddBookDialogFragment extends DialogFragment {
         return ((EditText) d.getView().findViewById(R.id.editISBN)).getText().toString();
     }
 
-    public static String getEnterPagesCompleted(Dialog d) {
-        return ((EditText) d.findViewById(R.id.editPagesCompleted)).getText().toString();
-    }
+    //public static String getEnterPagesCompleted(Dialog d) {
+    ///    return ((EditText) d.findViewById(R.id.editPagesCompleted)).getText().toString();
+    //}
 
-    public static String getEnterPagesTotal(Dialog d) {
-        return ((EditText) d.findViewById(R.id.editPagesTotal)).getText().toString();
-    }
+   // public static String getEnterPagesTotal(Dialog d) {
+   //     return ((EditText) d.findViewById(R.id.editPagesTotal)).getText().toString();
+   // }
 
 
     /**

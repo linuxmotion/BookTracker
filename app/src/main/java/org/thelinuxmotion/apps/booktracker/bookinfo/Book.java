@@ -3,6 +3,7 @@ package org.thelinuxmotion.apps.booktracker.bookinfo;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 
 /**
@@ -20,29 +21,39 @@ public class Book {
     @NonNull
     public String mISBN = "";
 
+
     @ColumnInfo(name = "ISBN_10")
     public String mIsbn_10;
+    final static String mIsbn10Name = "ISBN_10";
 
     @ColumnInfo(name = "ISBN_13")
     public String mIsbn_13;
+    final static public String mIsbn13Name = "ISBN_13";
+
 
     @ColumnInfo(name = "Author")
     public String mAuthor;
+    final static public String mAuthorName = "Author";
 
     @ColumnInfo(name = "Edition")
     public String mEdition;
+    final static public String mEditionName = "Edition";
 
     @ColumnInfo(name = "Binding")
     public String mBinding;
+    final static public String mBindingName = "Binding";
 
     @ColumnInfo(name = "Publisher")
     public String mPublisher;
+    public final static String mPublisherName = "Publisher";
 
     @ColumnInfo(name = "Publish_date")
     public String mDatePublished;
+    public final static String mDatePublishedName = "Publish_date";
 
-    @ColumnInfo(name = "total_pages")
+    @ColumnInfo(name = "Total_pages")
     public String mTotalPages;
+    public final static String mTotalPagesName = "Total_pages";
 
 
     public Book() {
@@ -117,6 +128,35 @@ public class Book {
         this.mDatePublished = mDatePublished;
     }
 
+    public Intent toIntent(){
 
+        Intent b = new Intent();
+        b.putExtra(mAuthorName,mAuthor);
+        b.putExtra(mBindingName, mBinding);
+        b.putExtra(mEditionName, mEdition);
+        b.putExtra(mPublisherName, mPublisher);
+        b.putExtra(mDatePublishedName, mDatePublished);
+        b.putExtra(mIsbn13Name, mIsbn_13);
+        //TODO: REmove during release, override the isbn 13 for now
+        b.putExtra(mIsbn13Name, mISBN);
+        //in the end this value will be assigned by a online db
+        b.putExtra(mIsbn10Name,mIsbn_10);
+        b.putExtra(mTotalPagesName, mTotalPages);
+        return b;
+
+    }
+
+    public void fromIntent(Intent i){
+
+        mAuthor = i.getStringExtra(mAuthorName);
+        mBinding = i.getStringExtra(mBindingName);
+        mEdition = i.getStringExtra(mEditionName);
+        mPublisher = i.getStringExtra(mPublisherName);
+        mDatePublished = i.getStringExtra(mDatePublishedName);
+        mIsbn_13 = i.getStringExtra(mIsbn13Name);
+        mIsbn_10 = i.getStringExtra(mIsbn10Name);
+        mTotalPages = i.getStringExtra(mTotalPagesName);
+        mISBN = mIsbn_13;
+    }
 
 }

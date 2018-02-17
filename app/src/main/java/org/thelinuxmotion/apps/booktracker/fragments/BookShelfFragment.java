@@ -12,12 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
-import org.thelinuxmotion.apps.booktracker.bookinfo.Book;
 import org.thelinuxmotion.apps.booktracker.BookActivity;
-import org.thelinuxmotion.apps.booktracker.adapters.BookAdapter;
 import org.thelinuxmotion.apps.booktracker.R;
+import org.thelinuxmotion.apps.booktracker.adapters.BookAdapter;
+import org.thelinuxmotion.apps.booktracker.bookinfo.Book;
 import org.thelinuxmotion.apps.booktracker.persistence.AppDataBase;
 
 import java.util.ArrayList;
@@ -63,15 +62,13 @@ public class BookShelfFragment extends Fragment {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-            Log.v("clickEvent", "Grid item was clicked");
-            Toast.makeText(adapterView.getContext(), "Item " + i + " clicked. ISBN: ?", Toast.LENGTH_SHORT).show();
-
-
             Intent intent = new Intent(adapterView.getContext().getApplicationContext(), BookActivity.class);
             //EditText editText = (EditText) findViewById(R.id.editText);
            // String message = editText.getText().toString();
             Book b = mBookAdapter.getItem(i);
-            intent.putExtra(BookFragment.ARG_ISBN, b.getmISBN());
+
+            intent.putExtras(b.toIntent());
+
             startActivity(intent);
 
 

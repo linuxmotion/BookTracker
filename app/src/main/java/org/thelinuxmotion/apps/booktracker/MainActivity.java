@@ -44,24 +44,12 @@ public class MainActivity extends AppCompatActivity implements BookShelfFragment
 
         if (validISBN) {
 
-            String completed =
-                    ((EditText) dialog.getDialog().findViewById(R.id.editPagesCompleted)).getText().toString();
-            String total =
-                    ((EditText) dialog.getDialog().findViewById(R.id.editPagesTotal)).getText().toString();
 
             //TODO: Remove when done testing book adding system. We should never reach here with a empty isbn
             {
                 if (isbn.isEmpty())//If we got here we are probably testing the book adding system
                     isbn = "123456789012";// this is a dummy value
             }
-
-            // If the fields are blank just set them to zero
-            if (completed.isEmpty())
-                completed = "0";
-            if (total.isEmpty())
-                total = "0";
-            int t = Integer.parseInt(total);
-            int c = Integer.parseInt(completed);
 
             Book b = getBookfromOnlineDB(isbn);
             // add the filled book
