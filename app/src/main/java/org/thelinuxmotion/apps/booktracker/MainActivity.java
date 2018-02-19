@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements BookShelfFragment
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mBookShelf = (BookShelfFragment) getSupportFragmentManager().findFragmentById(R.id.bookShelf);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        Toolbar myToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
     }

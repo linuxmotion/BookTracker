@@ -18,7 +18,7 @@ import java.util.List;
  * Created by jweyr on 2/15/2018.
  */
 
-public class HeatMapGridAdapter extends ArrayAdapter {
+public class HeatMapGridAdapter extends ArrayAdapter<BookReadingDetails> {
 
     static class HeatMapColors {
         static int BLUE = Color.BLUE;
@@ -40,17 +40,37 @@ public class HeatMapGridAdapter extends ArrayAdapter {
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
             imageView = new ImageView(parent.getContext());
-            imageView.setLayoutParams(new GridView.LayoutParams(50, 50));
+            imageView.setLayoutParams(new GridView.LayoutParams(100, 100));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(8, 8, 8, 16);
+            imageView.setPadding(8, 8, 8, 8);
             imageView.setFocusable(false);
         } else {
             imageView = (ImageView) convertView;
         }
 
-        imageView.setBackgroundColor(HeatMapColors.BLUE);
+        BookReadingDetails readingDetails = getItem(position);
+
+        // We should actually interpolater from 0 to 60
+        // with 30 being the green time
+        //TODO: Add color interpolation/changing
+        if(readingDetails.mTimeSpentReading >= 30)
+            imageView.setBackgroundColor(HeatMapColors.GREEN);
+        else if (readingDetails.mTimeSpentReading >= 10)
+            imageView.setBackgroundColor(HeatMapColors.CYAN);
+        else
+            imageView.setBackgroundColor(HeatMapColors.BLUE);
+
+
         return imageView;
 
+    }
+
+    @Override
+    public void add(@Nullable BookReadingDetails object) {
+        // We need to find if the books in the list
+
+
+        super.add(object);
     }
 
     public void add(List<BookReadingDetails> objects) {

@@ -30,7 +30,7 @@ public class BookActivity extends AppCompatActivity
             fragmentTransaction.replace(R.id.book_activity_fragment, fragment);
             fragmentTransaction.commit();
 
-            Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+            Toolbar myToolbar = findViewById(R.id.my_toolbar);
             setSupportActionBar(myToolbar);
             // Get a support ActionBar corresponding to this toolbar
             ActionBar ab = getSupportActionBar();

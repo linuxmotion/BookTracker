@@ -128,6 +128,8 @@ public class Book {
         this.mDatePublished = mDatePublished;
     }
 
+    public String getTotalPages() {return mTotalPages;  }
+
     public Intent toIntent(){
 
         Intent b = new Intent();

@@ -2,26 +2,30 @@ package org.thelinuxmotion.apps.booktracker.bookinfo;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
-
-import java.util.Date;
+import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 /**
  * Created by jweyr on 2/11/2018.
  */
 
-@Entity
+@Entity(tableName = "book")
 public class BookReadingDetails {
 
     // This is the name of the database
-    String mIsbn;
+    @PrimaryKey
+    public @NonNull String mIsbn;
+
+    @ColumnInfo(name = "day")
+    public long mDay;
 
     @ColumnInfo(name = "date")
-    Date mDate;
+    public long mDateTime;
 
     @ColumnInfo(name = "pages_completed")
-    int pagesCompleted;
+    public int pagesCompleted;
 
     @ColumnInfo(name = "time_spent_reading")
-    long mTimeSpentReading;
+    public long mTimeSpentReading;
 
 }

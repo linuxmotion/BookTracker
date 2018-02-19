@@ -114,7 +114,7 @@ public class AddBookDialogFragment extends DialogFragment {
         View v = inflater.inflate(R.layout.fragment_add_book_dialog, container, false);
 
 
-        mEnterISBN = (EditText) v.findViewById(R.id.editISBN);
+        mEnterISBN = v.findViewById(R.id.editISBN);
        // mEnterPagesCompleted = (EditText) v.findViewById(R.id.editPagesCompleted);
        // mEnterPagesTotal = (EditText) v.findViewById(R.id.editPagesTotal);
         return v;
