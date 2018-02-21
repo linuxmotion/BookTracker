@@ -10,7 +10,6 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import org.thelinuxmotion.apps.booktracker.R;
 
@@ -33,17 +32,11 @@ public class AddBookDialogFragment extends DialogFragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    //private ArrayList<Book> mBooksList;
-
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private OnAddBookDialogListener mListener;
-
-    private EditText mEnterISBN;
-    //private EditText mEnterPagesCompleted;
-   // private EditText mEnterPagesTotal;
 
 
     public AddBookDialogFragment() {
@@ -110,14 +103,7 @@ public class AddBookDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_add_book_dialog, container, false);
-
-
-        mEnterISBN = v.findViewById(R.id.editISBN);
-       // mEnterPagesCompleted = (EditText) v.findViewById(R.id.editPagesCompleted);
-       // mEnterPagesTotal = (EditText) v.findViewById(R.id.editPagesTotal);
-        return v;
+ return super.onCreateView(inflater,container,savedInstanceState);
     }
 
 
@@ -138,18 +124,6 @@ public class AddBookDialogFragment extends DialogFragment {
         mListener = null;
     }
 
-    public static String getISBN(AddBookDialogFragment d) {
-        return ((EditText) d.getView().findViewById(R.id.editISBN)).getText().toString();
-    }
-
-    //public static String getEnterPagesCompleted(Dialog d) {
-    ///    return ((EditText) d.findViewById(R.id.editPagesCompleted)).getText().toString();
-    //}
-
-   // public static String getEnterPagesTotal(Dialog d) {
-   //     return ((EditText) d.findViewById(R.id.editPagesTotal)).getText().toString();
-   // }
-
 
     /**
      * This interface must be implemented by activities that contain this
@@ -158,7 +132,6 @@ public class AddBookDialogFragment extends DialogFragment {
      * activity.
      */
     public interface OnAddBookDialogListener {
-        // TODO: Update argument type and name
 
         void onDialogPositiveClick(AddBookDialogFragment dialog);
 

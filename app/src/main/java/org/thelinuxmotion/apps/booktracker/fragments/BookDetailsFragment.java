@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -21,6 +22,8 @@ import org.thelinuxmotion.apps.booktracker.persistence.BookDetailsDatabase;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -28,7 +31,7 @@ import java.util.List;
  * Created by jweyr on 2/8/2018.
  */
 
-public class BookFragment extends Fragment {
+public class BookDetailsFragment extends Fragment {
 
 
     private Book mBook;
@@ -36,7 +39,7 @@ public class BookFragment extends Fragment {
 
     private BookDetailsDatabase mDb;
 
-    public BookFragment() {
+    public BookDetailsFragment() {
 
     }
     /**
@@ -46,8 +49,8 @@ public class BookFragment extends Fragment {
      * @param bookData the data the book in the database in an intent.
      * @return A new instance of fragment Book.
      */
-    public static BookFragment newInstance(Intent bookData) {
-        BookFragment fragment = new BookFragment();
+    public static BookDetailsFragment newInstance(Intent bookData) {
+        BookDetailsFragment fragment = new BookDetailsFragment();
         fragment.setArguments(bookData.getExtras());
         return fragment;
     }
@@ -83,9 +86,32 @@ public class BookFragment extends Fragment {
          mDb = Room.databaseBuilder(getContext(),
                  BookDetailsDatabase.class, mBook.mISBN).allowMainThreadQueries().build();
         // We now have the list of book details
-        List<BookReadingDetails> details = mDb.bookDetailsDao().getAll();
+        final List<BookReadingDetails> details = mDb.bookDetailsDao().getAll();
+        Collections.sort(details, new Comparator<BookReadingDetails>() {
+            @Override
+            public int compare(BookReadingDetails details1, BookReadingDetails details2) {
+
+                if (details1.mDay == details2.mDay)
+                    return 0;
+                if(details1.mDay < details2.mDay)
+                    return -1;
+                else
+                    return 1 ;
+            }
+        });
+
         // Find all book details from the same day and update the book entry for the adapter
         // do this for all the book entries in the current month
+        // loop through the entire details list
+        for(int i = 0,j = 1; i < details.size(); i++){
+            BookReadingDetails b = details.get(i);// get the details for each pos
+            if(b.mDay > j) // if the current entries day is greater than the last entry
+                j++; // we have gone to the next day
+
+            adapterDays.get(j-1).pagesCompleted += b.pagesCompleted;
+            adapterDays.get(j-1).mTimeSpentReading += b.mTimeSpentReading;
+        }
+
         // if we hae multiple book from the dame day add all the entries up and give a grad total
         // for that day, fine grain on touch will be implemented later
 
@@ -124,11 +150,11 @@ public class BookFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
         // Inflate the view
-        View v = inflater.inflate(R.layout.bookfragment,container,false);
+        View v = inflater.inflate(R.layout.book_details_fragment,container,false);
         //Set all the view's information
         {
             TextView bookname = v.findViewById(R.id.display_book_name);
@@ -142,6 +168,25 @@ public class BookFragment extends Fragment {
 
             GridView map = v.findViewById(R.id.heatmapgrid);
             map.setAdapter(mHeatMapAdapter);
+
+            Button addEntry = v.findViewById(R.id.add_reading_entry);
+            addEntry.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                   AddBookDetailsDialog dialog = AddBookDetailsDialog.newInstance();
+                   dialog.show(getFragmentManager(),"Details Dialog");
+
+                }
+            });
+
+            /*map.setOnItemClickListener(new GridView.OnItemClickListener(){
+;
+
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                }
+            });*/
 
             ProgressBar progress = v.findViewById(R.id.book_completion_progress_bar);
             // We should find the total amount of pages read, the total amount of pages
@@ -164,5 +209,28 @@ public class BookFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
+    }
+
+    public void addDetails(BookReadingDetails details) {
+
+            details.mIsbn = Calendar.getInstance().getTime().toString();
+            // add the details to the database
+            mDb.bookDetailsDao().add(details);
+            // update the adapter
+            updateAdapter(details);
+
+
+    }
+
+    private void updateAdapter(BookReadingDetails details) {
+
+        int day = details.mDay;
+        BookReadingDetails book = mHeatMapAdapter.getItem(day);
+        book.mTimeSpentReading += details.mTimeSpentReading;
+        book.pagesCompleted += details.pagesCompleted;
+        // Update the UI now
+        mHeatMapAdapter.notifyDataSetChanged();
+
+
     }
 }

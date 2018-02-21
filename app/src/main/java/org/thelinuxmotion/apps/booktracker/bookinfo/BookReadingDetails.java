@@ -17,7 +17,7 @@ public class BookReadingDetails {
     public @NonNull String mIsbn;
 
     @ColumnInfo(name = "day")
-    public long mDay;
+    public int mDay;
 
     @ColumnInfo(name = "date")
     public long mDateTime;

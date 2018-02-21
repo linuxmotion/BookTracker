@@ -1,25 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-   >
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context=".BookDetailsActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/my_toolbar"
+    <include layout="@layout/activities_toolbar" />
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/book_activity_fragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp" />
+        android:layout_marginStart="8dp"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/book_activity_fragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:layout="@layout/book_details_fragment">
+
+        </FrameLayout>
+
+
+    </LinearLayout>
+
 </LinearLayout>

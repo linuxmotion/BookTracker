@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import org.thelinuxmotion.apps.booktracker.BookActivity;
+import org.thelinuxmotion.apps.booktracker.BookDetailsActivity;
 import org.thelinuxmotion.apps.booktracker.R;
 import org.thelinuxmotion.apps.booktracker.adapters.BookAdapter;
 import org.thelinuxmotion.apps.booktracker.bookinfo.Book;
@@ -42,8 +42,6 @@ public class BookShelfFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
 
-    // private ArrayList<Book> mBooksList;
-
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -62,7 +60,7 @@ public class BookShelfFragment extends Fragment {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-            Intent intent = new Intent(adapterView.getContext().getApplicationContext(), BookActivity.class);
+            Intent intent = new Intent(adapterView.getContext().getApplicationContext(), BookDetailsActivity.class);
             //EditText editText = (EditText) findViewById(R.id.editText);
            // String message = editText.getText().toString();
             Book b = mBookAdapter.getItem(i);
@@ -77,7 +75,6 @@ public class BookShelfFragment extends Fragment {
     }
 
     public BookShelfFragment() {
-        //mBookAdapter = new BookAdapter();
     }
 
     /**
