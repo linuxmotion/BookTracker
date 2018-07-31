@@ -65,6 +65,7 @@ public class HeatMapGridAdapter extends ArrayAdapter<BookReadingDetails> {
 
     }
 
+
     @Override
     public void add(@Nullable BookReadingDetails object) {
         // We need to find if the books in the list

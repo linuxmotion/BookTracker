@@ -21,6 +21,10 @@ public class Book {
     @NonNull
     public String mISBN = "";
 
+    @ColumnInfo(name = "BOOK_TITLE")
+    public String mBookTitle;
+    final static String mBookTitleName = "BOOK_TITLE";
+
 
     @ColumnInfo(name = "ISBN_10")
     public String mIsbn_10;
@@ -49,7 +53,11 @@ public class Book {
 
     @ColumnInfo(name = "Publish_date")
     public String mDatePublished;
-    public final static String mDatePublishedName = "Publish_date";
+    public final static String mDatePublishedName = "PublisSh_date";
+
+    @ColumnInfo(name = "Pages_Completed")
+    public String mPagesCompleted;
+    public final static String mPagesCompletedName = "Pages_completed";
 
     @ColumnInfo(name = "Total_pages")
     public String mTotalPages;
@@ -130,10 +138,13 @@ public class Book {
 
     public String getTotalPages() {return mTotalPages;  }
 
+    public String getPAgesCompleted() {return mPagesCompleted;  }
+
     public Intent toIntent(){
 
         Intent b = new Intent();
         b.putExtra(mAuthorName,mAuthor);
+        b.putExtra(mBookTitleName,mBookTitle);
         b.putExtra(mBindingName, mBinding);
         b.putExtra(mEditionName, mEdition);
         b.putExtra(mPublisherName, mPublisher);
@@ -144,6 +155,7 @@ public class Book {
         //in the end this value will be assigned by a online db
         b.putExtra(mIsbn10Name,mIsbn_10);
         b.putExtra(mTotalPagesName, mTotalPages);
+        b.putExtra(mPagesCompletedName, mPagesCompleted);
         return b;
 
     }
@@ -158,6 +170,8 @@ public class Book {
         mIsbn_13 = i.getStringExtra(mIsbn13Name);
         mIsbn_10 = i.getStringExtra(mIsbn10Name);
         mTotalPages = i.getStringExtra(mTotalPagesName);
+        mPagesCompleted = i.getStringExtra(mPagesCompletedName);
+        mBookTitle = i.getStringExtra(mBookTitleName);
         mISBN = mIsbn_13;
     }
 

@@ -1,7 +1,9 @@
 package org.thelinuxmotion.apps.booktracker.fragments;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -10,17 +12,24 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TimePicker;
 
 import org.thelinuxmotion.apps.booktracker.R;
+
+import java.util.Calendar;
 
 /**
  * Created by jweyr on 2/19/2018.
  */
 
-public class AddBookDetailsDialog extends DialogFragment {
+public class AddBookDetailsDialog extends DialogFragment
+        implements  DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
 
     private AddBookReadingDialogListener mListener;
+    private EditText mDate;
+    private EditText mTime;
 
     public AddBookDetailsDialog() {
         super();
@@ -74,8 +83,38 @@ public class AddBookDetailsDialog extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         final View layout = inflater.inflate(R.layout.reading_details_dialog_fragment_layout, null);
-        EditText date = layout.findViewById(R.id.dialog_details_date);
-        EditText time = layout.findViewById(R.id.dialog_details_time);
+
+        mDate = layout.findViewById(R.id.dialog_details_date);
+        mDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // We should create a datepicker dialog that return the date
+                Calendar c = Calendar.getInstance();
+               DatePickerDialog dialog
+                       = new DatePickerDialog(AddBookDetailsDialog.this.getContext(),
+                       AddBookDetailsDialog.this,
+                       c.get(Calendar.YEAR),
+                       c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+               dialog.show();
+
+            }
+        });
+
+        mTime = layout.findViewById(R.id.dialog_details_time);
+        mTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar c =  Calendar.getInstance();
+                TimePickerDialog dialog
+                        = new TimePickerDialog(AddBookDetailsDialog.this.getContext(),
+                        AddBookDetailsDialog.this,
+                        c.get(Calendar.HOUR),
+                        c.get(Calendar.MINUTE),
+                        false);
+                dialog.show();
+            }
+        });
+        
         EditText pages = layout.findViewById(R.id.dialog_details_completed);
         EditText spent = layout.findViewById(R.id.dialog_details_time_spent);
         // Inflate and set the layout for the dialog
@@ -107,6 +146,19 @@ public class AddBookDetailsDialog extends DialogFragment {
 
 
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+
+        mDate.setText(""+day);
+    }
+
+    @Override
+    public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+        mTime.setText(hour+"" +
+                "");
+
     }
 
     public interface AddBookReadingDialogListener{

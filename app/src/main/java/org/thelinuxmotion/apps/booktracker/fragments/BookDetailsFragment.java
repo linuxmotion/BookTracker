@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,9 +64,17 @@ public class BookDetailsFragment extends Fragment {
         t.putExtras(getArguments());
         // Intitalize the book
         mBook = new Book();
+
         // Now get the argument and set the as the book paramaters
         mBook.fromIntent(t);
 
+        // init heatmap
+        InitializeHeatmapAdapter();
+
+
+    }
+
+    private void InitializeHeatmapAdapter() {
         mHeatMapAdapter = new HeatMapGridAdapter(this.getContext(), 0);
         ArrayList<BookReadingDetails> adapterDays = getDefaultAdapter();
         // Add a couple of test values
@@ -83,8 +92,8 @@ public class BookDetailsFragment extends Fragment {
         // Open the databse or create it for the adapater
         // Eventually we only want entries that are in the current month by default instead
         // of all the reading entries
-         mDb = Room.databaseBuilder(getContext(),
-                 BookDetailsDatabase.class, mBook.mISBN).allowMainThreadQueries().build();
+        mDb = Room.databaseBuilder(getContext(),
+                BookDetailsDatabase.class, mBook.mISBN).allowMainThreadQueries().build();
         // We now have the list of book details
         final List<BookReadingDetails> details = mDb.bookDetailsDao().getAll();
         Collections.sort(details, new Comparator<BookReadingDetails>() {
@@ -116,8 +125,6 @@ public class BookDetailsFragment extends Fragment {
         // for that day, fine grain on touch will be implemented later
 
         mHeatMapAdapter.add(adapterDays);
-
-
     }
 
     @NonNull
@@ -157,18 +164,25 @@ public class BookDetailsFragment extends Fragment {
         View v = inflater.inflate(R.layout.book_details_fragment,container,false);
         //Set all the view's information
         {
+            // Sets the book name
             TextView bookname = v.findViewById(R.id.display_book_name);
-            bookname.setText(mBook.getIsbn_13());
+            bookname.setText(mBook.mBookTitle);
 
+            // Set the isbn
             TextView isbn = v.findViewById(R.id.display_isbn);
             isbn.setText(mBook.getIsbn_13());
 
+            //Set the pages completed and total
             TextView pages = v.findViewById(R.id.display_pages);
-            isbn.setText( "0/" +mBook.getTotalPages());
+            // Create the string for the numerical pages
+            String pagesText = mBook.mPagesCompleted + "/" + mBook.getTotalPages();
+            pages.setText(pagesText);
 
+            // Set the gridview adapter
             GridView map = v.findViewById(R.id.heatmapgrid);
             map.setAdapter(mHeatMapAdapter);
 
+            //Set the click handler for the entry button
             Button addEntry = v.findViewById(R.id.add_reading_entry);
             addEntry.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -188,17 +202,38 @@ public class BookDetailsFragment extends Fragment {
                 }
             });*/
 
-            ProgressBar progress = v.findViewById(R.id.book_completion_progress_bar);
-            // We should find the total amount of pages read, the total amount of pages
-            // and interpolate into a range from 0 to 100
-            progress.setProgress(50); // set to 50 to see the bar
+            setProgressBar(v);
 
         }
 
 
 
-
         return v;
+    }
+
+    private void setProgressBar(View v) {
+        // Get a reference to the progress bar
+        ProgressBar progress = v.findViewById(R.id.book_completion_progress_bar);
+
+        // Parse the pages completed and total
+        int comp = 0;
+        int tot = 1;// fallback values
+        try{
+            comp = Integer.parseInt(mBook.mPagesCompleted);
+            tot = Integer.parseInt(mBook.mTotalPages);
+        }
+        catch(NumberFormatException e){
+            Log.e("Progress bar","Could not parse the pages");
+            Log.e("Progress bar",e.getMessage());
+
+        }
+
+        // map the range [0,1] to the interval [0,100]
+        int t = comp/tot;
+        int progressNum = (100)*(t);
+        // We should find the total amount of pages read, the total amount of pages
+        // and interpolate into a range from 0 to 100
+        progress.setProgress(progressNum); // set to 50 to see the bar
     }
 
     @Override
@@ -218,16 +253,28 @@ public class BookDetailsFragment extends Fragment {
             mDb.bookDetailsDao().add(details);
             // update the adapter
             updateAdapter(details);
+            // We also need to update the UI that we have completed more pages
+
+            // Create the string for the numerical pages
+           // String pagesText = mBook.mPagesCompleted + "/" + mBook.getTotalPages();
+            TextView t = this.getView().findViewById(R.id.display_pages);
+            //t.setText(pagesText);
+
+
 
 
     }
 
+    // Update the gridview adapater so that it reflects when new information
+    // is added
     private void updateAdapter(BookReadingDetails details) {
 
         int day = details.mDay;
-        BookReadingDetails book = mHeatMapAdapter.getItem(day);
+        BookReadingDetails book = mHeatMapAdapter.getItem(day-1);
+        mHeatMapAdapter.remove(book);
         book.mTimeSpentReading += details.mTimeSpentReading;
         book.pagesCompleted += details.pagesCompleted;
+        mHeatMapAdapter.insert(book,day-1);
         // Update the UI now
         mHeatMapAdapter.notifyDataSetChanged();
 
