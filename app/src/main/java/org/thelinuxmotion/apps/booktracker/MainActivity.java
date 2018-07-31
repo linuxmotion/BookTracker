@@ -64,11 +64,25 @@ public class MainActivity extends AppCompatActivity implements BookShelfFragment
 
     }
 
+    /**
+     * Set the paramaters of the book. Uses an online database given a valid
+     * isbn
+     * @param isbn Isbn to perform the search query against
+     * @return
+     */
     public Book getBookfromOnlineDB(String isbn) {
         //TODO: Query the book by ISBN from an online DB and fill in the info for the book
         // for now just create a book from the ISBN
          Book b = new Book();
          b.setISBN(isbn);
+         b.mBookTitle = "Unknown title";
+         b.mAuthor ="Unknown Author";
+         b.mBinding = "Unknown binding";
+         b.mEdition = "Unknown edition";
+         b.mPublisher = "Unknown publisher";
+         b.mPagesCompleted = "0";
+         b.mTotalPages = "1000";
+
          return b;
     }
 
