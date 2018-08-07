@@ -37,6 +37,7 @@ public class BookDetailsFragment extends Fragment {
 
     private Book mBook;
     private HeatMapGridAdapter mHeatMapAdapter;
+    ArrayList<BookReadingDetails> mAdapterDays;
 
     private BookDetailsDatabase mDb;
 
@@ -76,16 +77,16 @@ public class BookDetailsFragment extends Fragment {
 
     private void InitializeHeatmapAdapter() {
         mHeatMapAdapter = new HeatMapGridAdapter(this.getContext(), 0);
-        ArrayList<BookReadingDetails> adapterDays = getDefaultAdapter();
+        mAdapterDays = getDefaultAdapter();
         // Add a couple of test values
-        adapterDays.get(2).pagesCompleted = 5;
-        adapterDays.get(2).mTimeSpentReading = 12;
+        //adapterDays.get(2).pagesCompleted = 5;
+        //adapterDays.get(2).mTimeSpentReading = 12;
 
-        adapterDays.get(5).pagesCompleted = 10;
-        adapterDays.get(5).mTimeSpentReading = 25;
+        //adapterDays.get(5).pagesCompleted = 10;
+        //adapterDays.get(5).mTimeSpentReading = 25;
 
-        adapterDays.get(7).pagesCompleted = 12;
-        adapterDays.get(7).mTimeSpentReading = 30;
+        //adapterDays.get(7).pagesCompleted = 12;
+        //adapterDays.get(7).mTimeSpentReading = 30;
 
         // Pretty much everything below should be on a separate Non UI thread, with a UI callback to
         // update
@@ -117,14 +118,16 @@ public class BookDetailsFragment extends Fragment {
             if(b.mDay > j) // if the current entries day is greater than the last entry
                 j++; // we have gone to the next day
 
-            adapterDays.get(j-1).pagesCompleted += b.pagesCompleted;
-            adapterDays.get(j-1).mTimeSpentReading += b.mTimeSpentReading;
+            mBook.mPagesCompleted = "" + (b.pagesCompleted + Integer.parseInt(mBook.mPagesCompleted));// Set the global UI pages completed
+            mAdapterDays.get(j-1).pagesCompleted += b.pagesCompleted;
+            mAdapterDays.get(j-1).mTimeSpentReading += b.mTimeSpentReading;
         }
 
         // if we hae multiple book from the dame day add all the entries up and give a grad total
         // for that day, fine grain on touch will be implemented later
+        mHeatMapAdapter.add(mAdapterDays);
 
-        mHeatMapAdapter.add(adapterDays);
+
     }
 
     @NonNull
@@ -255,10 +258,7 @@ public class BookDetailsFragment extends Fragment {
             updateAdapter(details);
             // We also need to update the UI that we have completed more pages
 
-            // Create the string for the numerical pages
-           // String pagesText = mBook.mPagesCompleted + "/" + mBook.getTotalPages();
-            TextView t = this.getView().findViewById(R.id.display_pages);
-            //t.setText(pagesText);
+
 
 
 
@@ -270,12 +270,24 @@ public class BookDetailsFragment extends Fragment {
     private void updateAdapter(BookReadingDetails details) {
 
         int day = details.mDay;
-        BookReadingDetails book = mHeatMapAdapter.getItem(day-1);
-        mHeatMapAdapter.remove(book);
+
+        BookReadingDetails book = mAdapterDays.get(day-1);//mHeatMapAdapter.getItem(day-1);
+        //mHeatMapAdapter.remove(book);
         book.mTimeSpentReading += details.mTimeSpentReading;
         book.pagesCompleted += details.pagesCompleted;
-        mHeatMapAdapter.insert(book,day-1);
+        mAdapterDays.set(day-1,book);
+        //mHeatMapAdapter.insert(book,day-1);
+
+
+        mBook.mPagesCompleted = "" + (details.pagesCompleted + Integer.parseInt(mBook.mPagesCompleted));// Set the global UI pages completed
+        //mBook.
         // Update the UI now
+        // Create the string for the numerical pages
+        String pagesText = mBook.mPagesCompleted + "/" + mBook.getTotalPages();
+        TextView t = this.getView().findViewById(R.id.display_pages);
+        t.setText(pagesText);
+
+        //mAdapterDays.notify();
         mHeatMapAdapter.notifyDataSetChanged();
 
 
