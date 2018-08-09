@@ -78,15 +78,6 @@ public class BookDetailsFragment extends Fragment {
     private void InitializeHeatmapAdapter() {
         mHeatMapAdapter = new HeatMapGridAdapter(this.getContext(), 0);
         mAdapterDays = getDefaultAdapter();
-        // Add a couple of test values
-        //adapterDays.get(2).pagesCompleted = 5;
-        //adapterDays.get(2).mTimeSpentReading = 12;
-
-        //adapterDays.get(5).pagesCompleted = 10;
-        //adapterDays.get(5).mTimeSpentReading = 25;
-
-        //adapterDays.get(7).pagesCompleted = 12;
-        //adapterDays.get(7).mTimeSpentReading = 30;
 
         // Pretty much everything below should be on a separate Non UI thread, with a UI callback to
         // update
@@ -97,6 +88,7 @@ public class BookDetailsFragment extends Fragment {
                 BookDetailsDatabase.class, mBook.mISBN).allowMainThreadQueries().build();
         // We now have the list of book details
         final List<BookReadingDetails> details = mDb.bookDetailsDao().getAll();
+        Log.v(details.size()+ "","Initialize Heatmap details doa size");
         Collections.sort(details, new Comparator<BookReadingDetails>() {
             @Override
             public int compare(BookReadingDetails details1, BookReadingDetails details2) {
@@ -109,22 +101,30 @@ public class BookDetailsFragment extends Fragment {
                     return 1 ;
             }
         });
+        Log.v(details.size()+"","Size after sort");
+
 
         // Find all book details from the same day and update the book entry for the adapter
         // do this for all the book entries in the current month
         // loop through the entire details list
         for(int i = 0,j = 1; i < details.size(); i++){
+            Log.v( i + "" ,"Iteration #");
             BookReadingDetails b = details.get(i);// get the details for each pos
-            if(b.mDay > j) // if the current entries day is greater than the last entry
-                j++; // we have gone to the next day
+            Log.v(b.mDay + "", "Current day");
+            int pos = b.mDay-1;
 
+            BookReadingDetails bd = mAdapterDays.get(pos);
+            bd.pagesCompleted += b.pagesCompleted;
+            bd.mTimeSpentReading += b.mTimeSpentReading;
+
+            mAdapterDays.set(pos, bd);
             mBook.mPagesCompleted = "" + (b.pagesCompleted + Integer.parseInt(mBook.mPagesCompleted));// Set the global UI pages completed
-            mAdapterDays.get(j-1).pagesCompleted += b.pagesCompleted;
-            mAdapterDays.get(j-1).mTimeSpentReading += b.mTimeSpentReading;
         }
 
         // if we hae multiple book from the dame day add all the entries up and give a grad total
         // for that day, fine grain on touch will be implemented later
+        Log.v(mAdapterDays.size() + "","Initilize Heatmap");
+
         mHeatMapAdapter.add(mAdapterDays);
 
 
@@ -134,6 +134,7 @@ public class BookDetailsFragment extends Fragment {
     private static ArrayList<BookReadingDetails> getDefaultAdapter() {
         Calendar now = GregorianCalendar.getInstance();
         int daysMonth = now.getActualMaximum(Calendar.DAY_OF_MONTH);
+        Log.v(daysMonth+"","Get Default Adapter");
         ArrayList<BookReadingDetails> adapterDays = new ArrayList<>();
         //Create each day in the months for the adapter
         for (int i = 1; i <= daysMonth; i++){
@@ -145,6 +146,7 @@ public class BookDetailsFragment extends Fragment {
             adapterDays.add(readingDetails);
 
         }
+        Log.v("default values set :" + adapterDays.size(), "Get Default Adapter");
         return adapterDays;
     }
 
@@ -253,15 +255,17 @@ public class BookDetailsFragment extends Fragment {
 
             details.mIsbn = Calendar.getInstance().getTime().toString();
             // add the details to the database
+
+        Log.v(details.mIsbn,"Add Details");
+        Log.v(details.mDay + "","Add Details");
+        Log.v(details.mDateTime + "","Add Details");
+        Log.v(details.mTimeSpentReading + "","Add Details");
+        Log.v(details.pagesCompleted + "","Add Details");
+
             mDb.bookDetailsDao().add(details);
             // update the adapter
             updateAdapter(details);
             // We also need to update the UI that we have completed more pages
-
-
-
-
-
 
     }
 
@@ -289,7 +293,7 @@ public class BookDetailsFragment extends Fragment {
 
         //mAdapterDays.notify();
         mHeatMapAdapter.notifyDataSetChanged();
-
+        setProgressBar(getView());
 
     }
 }

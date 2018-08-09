@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.EditText;
 
 import org.thelinuxmotion.apps.booktracker.bookinfo.Book;
@@ -49,6 +50,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AddBookDet
 
     }
 
+
     @Override
     public void onDialogPositiveClick(AddBookDetailsDialog dialog) {
 
@@ -60,15 +62,16 @@ public class BookDetailsActivity extends AppCompatActivity implements AddBookDet
         details.mTimeSpentReading =
                 Long.parseLong(t.getText().toString());
 
-        t = (EditText) dialog.getDialog().findViewById(R.id.dialog_details_date);
+
+        t = (EditText) dialog.getDialog().findViewById(R.id.dialog_details_date);//mm-dd-yyyy
         details.mDay =
-                Integer.parseInt(t.getText().toString());
+                Integer.parseInt(t.getText().toString().split("-")[1]);
 
-        t = (EditText) dialog.getDialog().findViewById(R.id.dialog_details_time);
+        t = (EditText) dialog.getDialog().findViewById(R.id.dialog_details_time);//hh:mm
         details.mDateTime =
-                Long.parseLong(t.getText().toString());
+                Long.parseLong(t.getText().toString().split(":")[0]);
 
-
+        Log.v("Dialog clicked",details.mDay + "Day of reading");
         mBookFragment.addDetails(details);
 
 

@@ -151,13 +151,12 @@ public class AddBookDetailsDialog extends DialogFragment
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
 
-        mDate.setText(""+day);
+        mDate.setText(month+ "-"+day + "-" + year);
     }
 
     @Override
     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-        mTime.setText(hour+"" +
-                "");
+        mTime.setText(hour+ ":" + minute + "");
 
     }
 

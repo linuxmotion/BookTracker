@@ -57,6 +57,8 @@ public class HeatMapGridAdapter extends ArrayAdapter<BookReadingDetails> {
             imageView.setBackgroundColor(HeatMapColors.GREEN);
         else if (readingDetails.mTimeSpentReading >= 10)
             imageView.setBackgroundColor(HeatMapColors.CYAN);
+        else if(readingDetails.mTimeSpentReading > 0)
+            imageView.setBackgroundColor(HeatMapColors.YELLOW);
         else
             imageView.setBackgroundColor(HeatMapColors.BLUE);
 
