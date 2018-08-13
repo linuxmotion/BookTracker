@@ -1,0 +1,26 @@
+{
+    "title": "Harry Potter and the Sorcerer's Stone",
+    "title_long": "Harry Potter and the Sorcerer's Stone: The Illustrated Edition (Harry Potter, Book 1)",
+    "isbn": "0545790352",
+    "isbn13": " 9780545790352",
+    "dewey_decimal": "string",
+    "format": "string",
+    "publisher": "Arthur A. Levine Books",
+    "language": "string",
+    "date_published": "2018-08-12T05:47:14.289Z",
+    "edition": "Illustrated",
+    "pages": 213,
+    "dimensions": "string",
+    "overview": "string",
+    "excerpt": "string",
+    "synopsys": "string",
+    "authors": [
+        "J.K. Rowling"
+    ],
+    "subjects": [
+        "string"
+    ],
+    "reviews": [
+        "string"
+    ]
+}
