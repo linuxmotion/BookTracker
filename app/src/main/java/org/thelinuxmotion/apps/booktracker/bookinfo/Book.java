@@ -5,6 +5,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 /**
  * Holds the information about a book. The isbn, pages read
@@ -63,7 +64,10 @@ public class Book {
     public String mTotalPages;
     public final static String mTotalPagesName = "Total_pages";
 
-
+    @ColumnInfo(name = "Synopsys")
+    public String mSynopsis;
+    public final static String mSynopsisName = "Synopsys";
+    
     public Book() {
 
     }
@@ -156,6 +160,7 @@ public class Book {
         b.putExtra(mIsbn10Name,mIsbn_10);
         b.putExtra(mTotalPagesName, mTotalPages);
         b.putExtra(mPagesCompletedName, mPagesCompleted);
+        b.putExtra(mSynopsisName,mSynopsis);
         return b;
 
     }
@@ -172,7 +177,28 @@ public class Book {
         mTotalPages = i.getStringExtra(mTotalPagesName);
         mPagesCompleted = i.getStringExtra(mPagesCompletedName);
         mBookTitle = i.getStringExtra(mBookTitleName);
+        mSynopsis = i.getStringExtra(mSynopsisName);
         mISBN = mIsbn_13;
     }
 
+    public void LogBook(String callingClass){
+
+
+        Log.d(callingClass,mAuthor);
+        Log.d(callingClass,mBinding);
+        Log.d(callingClass,mEdition);
+        Log.d(callingClass,mPublisher);
+        Log.d(callingClass,mDatePublished);
+        Log.d(callingClass,mIsbn_13);
+        Log.d(callingClass,mIsbn_10);
+        Log.d(callingClass,mTotalPages);
+        Log.d(callingClass,mPagesCompleted);
+        Log.d(callingClass,mBookTitle);
+        Log.d(callingClass,mSynopsis);
+        Log.d(callingClass,mISBN);
+
+
+    }
 }
+
+

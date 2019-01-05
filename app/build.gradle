@@ -29,10 +29,6 @@ dependencies {
 
     // ViewModel and LiveData
     implementation "android.arch.lifecycle:extensions:1.1.0"
-    // alternatively, just ViewModel
-    implementation "android.arch.lifecycle:viewmodel:1.1.0"
-    // alternatively, just LiveData
-    implementation "android.arch.lifecycle:livedata:1.1.0"
 
     annotationProcessor "android.arch.lifecycle:compiler:1.1.0"
 
@@ -48,5 +44,8 @@ dependencies {
 
     // Test helpers for Room
     testImplementation "android.arch.persistence.room:testing:1.0.0"
+
+    //Volley http library
+    implementation 'com.android.volley:volley:1.1.1'
 
 }

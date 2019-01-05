@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 
+import org.thelinuxmotion.apps.booktracker.Isbndb.ISBNOnlineDatabase;
 import org.thelinuxmotion.apps.booktracker.bookinfo.Book;
 import org.thelinuxmotion.apps.booktracker.bookinfo.ISBN;
 import org.thelinuxmotion.apps.booktracker.fragments.AddBookDialogFragment;
@@ -20,7 +21,8 @@ import org.thelinuxmotion.apps.booktracker.fragments.BookShelfFragment;
  * activity or fragment and dynamically envoked
  *
  */
-public class MainActivity extends AppCompatActivity implements BookShelfFragment.OnBookShelfInteractionListener, AddBookDialogFragment.OnAddBookDialogListener {
+public class MainActivity extends AppCompatActivity implements BookShelfFragment.OnBookShelfInteractionListener,
+        AddBookDialogFragment.OnAddBookDialogListener, ISBNOnlineDatabase.ISBNDBCallbackInterface {
     BookShelfFragment mBookShelf;
 
 
@@ -48,12 +50,13 @@ public class MainActivity extends AppCompatActivity implements BookShelfFragment
             //TODO: Remove when done testing book adding system. We should never reach here with a empty isbn
             {
                 if (isbn.isEmpty())//If we got here we are probably testing the book adding system
-                    isbn = "123456789012";// this is a dummy value
-            }
+                    isbn = "9780134706054";// Should return the book from  ht
 
-            Book b = getBookfromOnlineDB(isbn);
+            }
+            ISBNOnlineDatabase ISBNDB = new ISBNOnlineDatabase();
+            ISBNDB.getBookfromOnlineDB(isbn,this,this);
             // add the filled book
-            mBookShelf.addBooktoShelf(b);
+
 
 
         } else {
@@ -63,29 +66,6 @@ public class MainActivity extends AppCompatActivity implements BookShelfFragment
         //toast.show();
 
     }
-
-    /**
-     * Set the paramaters of the book. Uses an online database given a valid
-     * isbn
-     * @param isbn Isbn to perform the search query against
-     * @return
-     */
-    public Book getBookfromOnlineDB(String isbn) {
-        //TODO: Query the book by ISBN from an online DB and fill in the info for the book
-        // for now just create a book from the ISBN
-         Book b = new Book();
-         b.setISBN(isbn);
-         b.mBookTitle = "Unknown title";
-         b.mAuthor ="Unknown Author";
-         b.mBinding = "Unknown binding";
-         b.mEdition = "Unknown edition";
-         b.mPublisher = "Unknown publisher";
-         b.mPagesCompleted = "0";
-         b.mTotalPages = "1000";
-
-         return b;
-    }
-
 
     @Override
     public void onDialogNegativeClick(AddBookDialogFragment dialog) {
@@ -113,6 +93,21 @@ public class MainActivity extends AppCompatActivity implements BookShelfFragment
         }
         return true;
     }
+
+    @Override
+    public void OnReturnBook(Book book) {
+        // A book retrived from the online db is return here.
+        //Check to see if we recived a valid book
+        if(book == null){
+
+            return;
+        }
+        // We recived a valid book fro the db
+        // Add it to the book shelf
+        book.LogBook( "Succesfully propagated up to " + this.getClass().toString());
+        mBookShelf.addBooktoShelf(book);
+    }
+
 
     @Override
     public void OnBookShelfInteraction(Uri uri) {

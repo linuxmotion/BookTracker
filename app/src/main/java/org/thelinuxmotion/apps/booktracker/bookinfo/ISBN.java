@@ -31,7 +31,7 @@ public class ISBN {
     private static boolean checkISBN(String isbn) {
 
 
-        // If the array is a 2007 or ealier array convert
+        // If the array is a 2007 or earlier array convert
         // it to the 13 digit isbn number
         String nisbn = "";
 
@@ -42,6 +42,7 @@ public class ISBN {
             nisbn += "8";
 
         }
+        // Concatenate the new isbn and the field isbn
         for (int i = 0; i < isbn.length(); i++)
             nisbn += isbn.charAt(i);
         //If true return that the number is correct
