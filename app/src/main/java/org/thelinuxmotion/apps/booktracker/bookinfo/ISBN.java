@@ -53,10 +53,8 @@ public class ISBN {
 
         // Take the value mod 11 and see if it has a remainder
         int rem = sum % 11;
-        if (rem == 0)
-            return true;
+        return rem == 0;
 
-        return false;
     }
     private static boolean checkISBN13(ArrayList<Integer> isbn) {
 
@@ -64,7 +62,7 @@ public class ISBN {
         boolean alternate = true;
         int multbyone = 0;
         int multbythree = 0;
-        Integer digit = new Integer(0);
+        Integer digit = Integer.valueOf(0);
         for(int i = 1; i <= ISBN13; i++) {
             digit = isbn.get(i-1);
             if(alternate){
@@ -84,10 +82,8 @@ public class ISBN {
         // take the mod 10 of the generated check value
         int mod = genCheck % 10;
         // if there is no remainder than it is a valid isbn
-        if (mod == 0)
-            return true;
+        return mod == 0;
 
-        return  false;
     }
 
 }

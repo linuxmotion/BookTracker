@@ -9,14 +9,17 @@
         android:id="@+id/editISBN"
         android:layout_width="208dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginTop="116dp"
+        android:layout_marginBottom="8dp"
+        android:autofillHints="@string/enter_isbn_hint"
         android:contentDescription="@string/enter_isbn"
         android:ems="10"
+        android:hint="@string/enter_isbn_hint"
         android:inputType="number"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:targetApi="o" />
 
 </android.support.constraint.ConstraintLayout>

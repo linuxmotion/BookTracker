@@ -24,4 +24,5 @@
     <string name="pages_completed_hint">Enter the number of pages completed this session.</string>
     <string name="enter_date_hint">Enter the date that this session was performed.</string>
     <string name="enter_time_hint">Enter the time spent reading this session</string>
+    <string name="enter_isbn_hint">Please enter the ISBN of the book.</string>
 </resources>

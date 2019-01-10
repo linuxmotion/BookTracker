@@ -6,11 +6,12 @@
         android:id="@+id/action_add"
         android:icon="@drawable/ic_action_ic_add_black"
         android:title="@string/s_add_book"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
 
     <!-- Settings, should always be in the overflow -->
-    <item android:id="@+id/action_settings"
+    <item
+        android:id="@+id/action_settings"
         android:title="@string/action_settings"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
 
 </menu>

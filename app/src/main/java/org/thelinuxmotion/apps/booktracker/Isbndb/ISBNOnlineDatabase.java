@@ -116,7 +116,7 @@ public class ISBNOnlineDatabase {
 
             // Add a listener that is passed in that can propagate
             // the retreived book up to to main activityW
-            Log.v("ISBNDBOnResponse", "Response is: " + response.toString());
+            Log.v("ISBNDBOnResponse", "Response is: " + response);
             //Create  a new book
             Book b = getBookFromResponse(response);
             if (mCallback == null)

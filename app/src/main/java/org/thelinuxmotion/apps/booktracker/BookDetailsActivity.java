@@ -45,7 +45,8 @@ public class BookDetailsActivity extends AppCompatActivity implements AddBookDet
         ActionBar ab = getSupportActionBar();
 
         // Enable the Up button
-        ab.setDisplayHomeAsUpEnabled(true);
+        if (ab != null)
+            ab.setDisplayHomeAsUpEnabled(true);
 
 
     }
@@ -55,19 +56,19 @@ public class BookDetailsActivity extends AppCompatActivity implements AddBookDet
     public void onDialogPositiveClick(AddBookDetailsDialog dialog) {
 
         BookReadingDetails details = new BookReadingDetails();
-        EditText t = (EditText) dialog.getDialog().findViewById(R.id.dialog_details_completed);
+        EditText t = dialog.getDialog().findViewById(R.id.dialog_details_completed);
         details.pagesCompleted =
                 Integer.parseInt(t.getText().toString());
-        t = (EditText) dialog.getDialog().findViewById(R.id.dialog_details_time_spent);
+        t = dialog.getDialog().findViewById(R.id.dialog_details_time_spent);
         details.mTimeSpentReading =
                 Long.parseLong(t.getText().toString());
 
 
-        t = (EditText) dialog.getDialog().findViewById(R.id.dialog_details_date);//mm-dd-yyyy
+        t = dialog.getDialog().findViewById(R.id.dialog_details_date);//mm-dd-yyyy
         details.mDay =
                 Integer.parseInt(t.getText().toString().split("-")[1]);
 
-        t = (EditText) dialog.getDialog().findViewById(R.id.dialog_details_time);//hh:mm
+        t = dialog.getDialog().findViewById(R.id.dialog_details_time);//hh:mm
         details.mDateTime =
                 Long.parseLong(t.getText().toString().split(":")[0]);
 

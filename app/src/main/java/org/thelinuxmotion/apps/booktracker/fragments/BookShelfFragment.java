@@ -112,9 +112,7 @@ public class BookShelfFragment extends Fragment {
         ArrayList<Book> shelf = new ArrayList<>(entries.size());
 
         // Turn each DB object into the adapter object
-        for (Book entry : entries) {
-            shelf.add(entry);
-        }
+        shelf.addAll(entries);
         // If this is the first time create the adapter
         if (mBookAdapter == null)
             mBookAdapter = new BookAdapter(this.getActivity().getApplicationContext(), shelf);

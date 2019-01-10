@@ -234,7 +234,7 @@ public class BookDetailsFragment extends Fragment {
         }
 
         // map the range [0,1] to the interval [0,100]
-        float t = (float)( (comp)/(float)(tot) );
+        float t = (comp)/(float)(tot);
         Float progressNum = (100)*(t);
         // We should find the total amount of pages read, the total amount of pages
         // and interpolate into a range from 0 to 100
