@@ -15,4 +15,13 @@
     <string name="add_entry_button">Add Entry</string>
     <string name="book_image_desc">Image of book</string>
     <string name="display_pages_both_desc">Displays numerical value of pages completed and pages total</string>
+    <string name="enter_time_spent">Enter time spent</string>
+    <string name="enter_pages_completed">Enter pages completed</string>
+    <string name="enter_time">Enter time</string>
+    <string name="enter_date">Enter date</string>
+    <string name="enter_reading_details">Enter reading details</string>
+    <string name="time_spent_hint">Time spent reading the book this session.</string>
+    <string name="pages_completed_hint">Enter the number of pages completed this session.</string>
+    <string name="enter_date_hint">Enter the date that this session was performed.</string>
+    <string name="enter_time_hint">Enter the time spent reading this session</string>
 </resources>

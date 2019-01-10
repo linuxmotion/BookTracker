@@ -67,6 +67,10 @@ public class Book {
     @ColumnInfo(name = "Synopsys")
     public String mSynopsis;
     public final static String mSynopsisName = "Synopsys";
+
+    @ColumnInfo(name = "Book_image")
+    public String mBookImage;
+    public final static String mBookImageName = "Book_image";
     
     public Book() {
 

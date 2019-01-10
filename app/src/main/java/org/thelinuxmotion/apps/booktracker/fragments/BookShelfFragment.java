@@ -62,7 +62,7 @@ public class BookShelfFragment extends Fragment {
 
             Intent intent = new Intent(adapterView.getContext().getApplicationContext(), BookDetailsActivity.class);
             //EditText editText = (EditText) findViewById(R.id.editText);
-           // String message = editText.getText().toString();
+            // String message = editText.getText().toString();
             Book b = mBookAdapter.getItem(i);
 
             intent.putExtras(b.toIntent());
@@ -85,7 +85,6 @@ public class BookShelfFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment BookShelf.
      */
-    // TODO: Rename and change types and number of parameters
     public static BookShelfFragment newInstance(String param1, String param2) {
         BookShelfFragment fragment = new BookShelfFragment();
         Bundle args = new Bundle();
@@ -123,7 +122,6 @@ public class BookShelfFragment extends Fragment {
         //mBookAdapter.add(shelf);
         if (mBookClickedListener == null)
             mBookClickedListener = new BookClickedListener();
-
 
 
     }

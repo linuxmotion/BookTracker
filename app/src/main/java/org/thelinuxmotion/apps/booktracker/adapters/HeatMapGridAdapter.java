@@ -62,7 +62,6 @@ public class HeatMapGridAdapter extends ArrayAdapter<BookReadingDetails> {
         else
             imageView.setBackgroundColor(HeatMapColors.BLUE);
 
-
         return imageView;
 
     }
@@ -70,10 +69,8 @@ public class HeatMapGridAdapter extends ArrayAdapter<BookReadingDetails> {
 
     @Override
     public void add(@Nullable BookReadingDetails object) {
-        // We need to find if the books in the list
-
-
         super.add(object);
+
     }
 
     public void add(List<BookReadingDetails> objects) {

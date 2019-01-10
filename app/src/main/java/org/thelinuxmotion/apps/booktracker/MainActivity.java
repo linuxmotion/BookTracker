@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements BookShelfFragment
             //TODO: Remove when done testing book adding system. We should never reach here with a empty isbn
             {
                 if (isbn.isEmpty())//If we got here we are probably testing the book adding system
-                    isbn = "9780134706054";// Should return the book from  ht
+                    isbn = "9780134706054";// Should return the book from  android programming
 
             }
             ISBNOnlineDatabase ISBNDB = new ISBNOnlineDatabase();

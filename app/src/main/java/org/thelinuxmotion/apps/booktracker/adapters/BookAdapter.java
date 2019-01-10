@@ -28,9 +28,6 @@ public class BookAdapter extends ArrayAdapter<Book> {
         super(context, resource, books);
     }
 
-
-
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView;
@@ -48,10 +45,6 @@ public class BookAdapter extends ArrayAdapter<Book> {
         imageView.setImageResource(R.drawable.book_generic_213x);
         return imageView;
     }
-
-
-
-
 
     public void add(List<Book> objects) {
         for (Book obj: objects) {

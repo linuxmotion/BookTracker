@@ -27,46 +27,44 @@ public class ISBNOnlineDatabase {
     /**
      * Set the paramaters of the book. Uses an online database given a valid
      * isbn
+     *
      * @param isbn Isbn to perform the search query against
      * @return
      */
     public void getBookfromOnlineDB(final String isbn, ISBNDBCallbackInterface callback, Context context) {
-        //TODO: Query the book by ISBN from an online DB and fill in the info for the book
-        // for now just create a book from the ISBN
+        //create a book from the ISBN and online db
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(context);
-      // Request a string response from the ISBNDB
+        // Request a string response from the ISBNDB
         ISBNDBRequest stringRequest = new ISBNDBRequest(isbn, callback);
 
-        try{
+        try {
             Log.d(this.getClass().getName(), stringRequest.getHeaders().toString());
-        }catch (AuthFailureError error){
-
+        } catch (AuthFailureError error) {
 
         }
+
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
         queue.start();
 
     }
 
-    public interface ISBNDBCallbackInterface{
-
+    public interface ISBNDBCallbackInterface {
         void OnReturnBook(Book book);
-
 
     }
 
     private class ISBNDBRequest extends StringRequest {
 
         ISBNDBCallbackInterface mCallBack;
-        public ISBNDBRequest(String isbn, ISBNDBCallbackInterface callback){
-            this(Request.Method.GET,
-             "https://api.isbndb.com/book/" + isbn,
-                 new ISBNDBResponseListener(callback),
-                    new ISBNDBErrorListener());
 
+        public ISBNDBRequest(String isbn, ISBNDBCallbackInterface callback) {
+            this(Request.Method.GET,
+                    "https://api.isbndb.com/book/" + isbn,
+                    new ISBNDBResponseListener(callback),
+                    new ISBNDBErrorListener());
         }
 
         public ISBNDBRequest(int method, String url, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener) {
@@ -83,11 +81,11 @@ public class ISBNOnlineDatabase {
 
             super.getHeaders();
             Log.d(this.getClass().getName(), "Setting headers");
-            Map<String, String>  params = new HashMap<String, String>();
+            Map<String, String> params = new HashMap<String, String>();
             //params.put("Content-Type","application/json");
-            params.put("X-API-KEY","LDh9APouch4RDsPxCPUZK2zSsFhofYFN11XFxqWY");
-            params.put("Host","api.isbndb.com");
-            params.put("Accept","*/*");
+            params.put("X-API-KEY", "LDh9APouch4RDsPxCPUZK2zSsFhofYFN11XFxqWY");
+            params.put("Host", "api.isbndb.com");
+            params.put("Accept", "*/*");
             return params;
         }
     }
@@ -96,15 +94,16 @@ public class ISBNOnlineDatabase {
         @Override
         public void onErrorResponse(VolleyError error) {
             String TAG = "ErrorListener";
-            Log.e(TAG,"We've encountered an error.");
-            if(error.getMessage() != null) {
+            Log.e(TAG, "We've encountered an error.");
+            if (error.getMessage() != null) {
                 Log.e("ISBNOnlineDatabase" +
                         "se", error.getMessage());
 
             }
         }
     }
-    private class ISBNDBResponseListener implements Response.Listener<String>{
+
+    private class ISBNDBResponseListener implements Response.Listener<String> {
 
         private final ISBNDBCallbackInterface mCallback;
 
@@ -117,24 +116,19 @@ public class ISBNOnlineDatabase {
 
             // Add a listener that is passed in that can propagate
             // the retreived book up to to main activityW
-            Log.v("ISBNDBOnResponse","Response is: " + response.toString());
+            Log.v("ISBNDBOnResponse", "Response is: " + response.toString());
             //Create  a new book
             Book b = getBookFromResponse(response);
-            if(mCallback == null)
+            if (mCallback == null)
                 throw new RuntimeException("ISBNDBCallbackInterface must not be null");
+            mCallback.OnReturnBook(b);
 
-             mCallback.OnReturnBook(b);
-
-            //populate the book fields from the response from the online databse
-            //mBookShelf.addBooktoShelf(b);
-            //mCallback
         }
-
 
         private ArrayList<Book> getBooksFromResponse(String response) {
             ArrayList<Book> Books = new ArrayList<Book>();
 
-            try{
+            try {
                 // The main JSON body
                 JSONObject mainResponse = new JSONObject(response);
                 // We have the total number of books returned by the search
@@ -144,59 +138,48 @@ public class ISBNOnlineDatabase {
                 // create a book object to store the
                 Book book = new Book();
                 // Loop trough all the books
-                for(int i = 0; i < totalNumBooks; i++){
+                for (int i = 0; i < totalNumBooks; i++) {
                     // get the ith book
                     JSONObject obj = bookArray.getJSONObject(i);
                     // set the book object to the retreived data
-                    setBookFromJSONObject(book,obj);
+                    setBookFromJSONObject(book, obj);
                     // add this book to the list
                     Books.add(book);
-
                 }
 
-
-            }catch (JSONException execption){
+            } catch (JSONException execption) {
                 // remove all books from the list, it may be corrupted
                 Books = new ArrayList<Book>();
-
             }
-
-
 
             return Books;
         }
 
         /**
-         *
          * @param response This is the response from ISBNDB it is expected to be a single book object
          * @return The book that generated from the book JSON object
          */
         private Book getBookFromResponse(String response) {
 
             Book b = new Book();
-            try{
+            try {
 
                 JSONObject json = (JSONObject) new JSONTokener(response).nextValue();
                 //JSONArray arr = new JSONArray(response);
                 // if we did not recive a book from the database that mean that
                 // one does not exist for the value provided
                 JSONObject obj = json.optJSONObject("book");
-                if(obj == null)
+                if (obj == null)
                     return null; // return a blank book as a result
 
                 setBookFromJSONObject(b, obj);
-            }catch (Exception e){
+            } catch (Exception e) {
 
-               // Log.v("Book Response", e.toString());
+                // Log.v("Book Response", e.toString());
                 Log.e("Book Response", e.getMessage());
                 //Log.i("JSON", e.getStackTrace().);
-
-
             }
-
-
             return b;
-
         }
 
         private void setBookFromJSONObject(Book b, JSONObject obj) throws JSONException {
@@ -205,7 +188,7 @@ public class ISBNOnlineDatabase {
             b.mAuthor = obj.getString("authors");
             b.mIsbn_10 = obj.getString("isbn");
             b.mIsbn_13 = obj.getString("isbn13");
-            b.mTotalPages = obj.optString("pages","0");
+            b.mTotalPages = obj.optString("pages", "0");
             b.mBinding = obj.getString("binding");
             b.mEdition = obj.getString("edition");
             b.mSynopsis = obj.getString("synopsys");
@@ -217,10 +200,6 @@ public class ISBNOnlineDatabase {
         }
 
     }
-
-
-
-
 
 
 }
