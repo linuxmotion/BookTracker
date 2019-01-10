@@ -1,12 +1,14 @@
 package org.thelinuxmotion.apps.booktracker.bookinfo;
 
+import java.util.ArrayList;
+
 /**
  * Contains the data for a ISBN. Contains methods to validate ISBN's
  */
 
 public class ISBN {
 
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
 
     /**
      * @param isbn raw string of the isbn
@@ -15,71 +17,77 @@ public class ISBN {
      */
     public static boolean isValidISBN(String isbn) {
 
-        //DEBUG SET TO TRUE ALWAYS
+
         if (DEBUG)
             return true;
 
-        if (isbn.length() != 10 && isbn.length() != 13)
-            return false;
-
-
-        return ISBN.checkISBN(isbn);
-
-    }
-
-
-    private static boolean checkISBN(String isbn) {
-
-
-        // If the array is a 2007 or earlier array convert
-        // it to the 13 digit isbn number
-        String nisbn = "";
-
-        if (isbn.length() == 10) {
-
-            nisbn += "9";
-            nisbn += "7";
-            nisbn += "8";
-
+        ArrayList<Integer> isbnl = convertToIntList(isbn);
+        if (isbnl.size() == 10){
+            return ISBN.checkISBN10(isbnl);
         }
-        // Concatenate the new isbn and the field isbn
-        for (int i = 0; i < isbn.length(); i++)
-            nisbn += isbn.charAt(i);
-        //If true return that the number is correct
-
-        int sum1 = 0, sum3 = 0;
-        StringBuilder c = new StringBuilder();
-
-        for (int i = 0; i < 12; i++) {
-
-            c.append(nisbn.charAt(i));
-
-            sum1 += Integer.parseInt(c.toString());
-
-            c = new StringBuilder();
-            c.append(nisbn.charAt(i + 1));
-
-            sum3 += (3 * Integer.parseInt(c.toString()));
-
-            i++;
+        else if(isbnl.size() == 13){
+            return ISBN.checkISBN13(isbnl);
         }
-
-        int tsum = sum1 + sum3;
-        int msum = ((tsum) % 10);
-        int checkDigit = 10 - msum;
-
-        c = new StringBuilder();
-        c.append(nisbn.charAt(12));
-
-        // Check the last digit and the check digit
-        if (checkDigit == Integer.parseInt(c.toString()))
-            return true;
-        // if the check digits dindt match
-        // say so
         return false;
-
-
     }
 
+    private static ArrayList<Integer> convertToIntList(String isbn) {
+        ArrayList<Integer> ls = new ArrayList<>();
+
+        for (int i = 0; i < isbn.length(); i++){
+            ls.add(Integer.parseInt(isbn.charAt(i) +"" ) );
+        }
+        return ls;
+    }
+
+    private static boolean checkISBN10(ArrayList<Integer> isbn) {
+
+        final int ISBN10 = 10;
+        int sum = 0;
+        // We only nee the first nine digits
+        for (int i = 1; i <= ISBN10; i++) {
+            // get the ninth digit and count backwards
+            // add this number to the sum
+            sum = sum + (isbn.get(ISBN10-i)*i);
+        }
+
+        // Take the value mod 11 and see if it has a remainder
+        int rem = sum % 11;
+        if (rem == 0)
+            return true;
+
+        return false;
+    }
+    private static boolean checkISBN13(ArrayList<Integer> isbn) {
+
+        final int ISBN13 = 13;
+        boolean alternate = true;
+        int multbyone = 0;
+        int multbythree = 0;
+        Integer digit = new Integer(0);
+        for(int i = 1; i <= ISBN13; i++) {
+            digit = isbn.get(i-1);
+            if(alternate){
+                // all of the odd values, 1,3,5,7,9,11
+                multbyone += digit;
+            }else{
+                // all of the even values 2,4,6,8,10,12
+                multbythree += digit;
+            }
+            alternate = !alternate;
+
+        }
+        // Multiply the even digits by three
+        multbythree = multbythree*3;
+        // add both sets of digits
+        int genCheck = multbyone + multbythree;
+        // take the mod 10 of the generated check value
+        int mod = genCheck % 10;
+        // if there is no remainder than it is a valid isbn
+        if (mod == 0)
+            return true;
+
+        return  false;
+    }
 
 }
