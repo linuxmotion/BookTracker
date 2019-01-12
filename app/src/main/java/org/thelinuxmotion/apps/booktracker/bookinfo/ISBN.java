@@ -8,18 +8,12 @@ import java.util.ArrayList;
 
 public class ISBN {
 
-    public static boolean DEBUG = false;
-
     /**
      * @param isbn raw string of the isbn
      * @return whether the isbn that was passed into it is a
      * valid isbn.
      */
     public static boolean isValidISBN(String isbn) {
-
-
-        if (DEBUG)
-            return true;
 
         ArrayList<Integer> isbnl = convertToIntList(isbn);
         if (isbnl.size() == 10){
@@ -62,7 +56,7 @@ public class ISBN {
         boolean alternate = true;
         int multbyone = 0;
         int multbythree = 0;
-        Integer digit = Integer.valueOf(0);
+        Integer digit;
         for(int i = 1; i <= ISBN13; i++) {
             digit = isbn.get(i-1);
             if(alternate){

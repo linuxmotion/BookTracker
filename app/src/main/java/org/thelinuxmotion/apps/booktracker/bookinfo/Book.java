@@ -24,49 +24,49 @@ public class Book {
 
     @ColumnInfo(name = "BOOK_TITLE")
     public String mBookTitle;
-    final static String mBookTitleName = "BOOK_TITLE";
+    private final static String mBookTitleName = "BOOK_TITLE";
 
 
     @ColumnInfo(name = "ISBN_10")
     public String mIsbn_10;
-    final static String mIsbn10Name = "ISBN_10";
+    private final static String mIsbn10Name = "ISBN_10";
 
     @ColumnInfo(name = "ISBN_13")
     public String mIsbn_13;
-    final static public String mIsbn13Name = "ISBN_13";
+    private final static String mIsbn13Name = "ISBN_13";
 
 
     @ColumnInfo(name = "Author")
     public String mAuthor;
-    final static public String mAuthorName = "Author";
+    private final static String mAuthorName = "Author";
 
     @ColumnInfo(name = "Edition")
     public String mEdition;
-    final static public String mEditionName = "Edition";
+    private final static String mEditionName = "Edition";
 
     @ColumnInfo(name = "Binding")
     public String mBinding;
-    final static public String mBindingName = "Binding";
+    private final static String mBindingName = "Binding";
 
     @ColumnInfo(name = "Publisher")
     public String mPublisher;
-    public final static String mPublisherName = "Publisher";
+    private final static String mPublisherName = "Publisher";
 
     @ColumnInfo(name = "Publish_date")
     public String mDatePublished;
-    public final static String mDatePublishedName = "PublisSh_date";
+    private final static String mDatePublishedName = "PublisSh_date";
 
     @ColumnInfo(name = "Pages_Completed")
     public String mPagesCompleted;
-    public final static String mPagesCompletedName = "Pages_completed";
+    private final static String mPagesCompletedName = "Pages_completed";
 
     @ColumnInfo(name = "Total_pages")
     public String mTotalPages;
-    public final static String mTotalPagesName = "Total_pages";
+    private final static String mTotalPagesName = "Total_pages";
 
     @ColumnInfo(name = "Synopsys")
     public String mSynopsis;
-    public final static String mSynopsisName = "Synopsys";
+    private final static String mSynopsisName = "Synopsys";
 
     @ColumnInfo(name = "Book_image")
     public String mBookImage;
@@ -75,13 +75,16 @@ public class Book {
     public Book() {
 
     }
-
+    public Book(String isbn) {
+        setISBN(isbn);
+    }
     public boolean setISBN(@NonNull String isbn) {
 
         mISBN = isbn;
         return ISBN.isValidISBN(mISBN);
     }
 
+    @NonNull
     public String getmISBN() {
 
         return mISBN;
@@ -158,7 +161,6 @@ public class Book {
         b.putExtra(mPublisherName, mPublisher);
         b.putExtra(mDatePublishedName, mDatePublished);
         b.putExtra(mIsbn13Name, mIsbn_13);
-        //TODO: REmove during release, override the isbn 13 for now
         b.putExtra(mIsbn13Name, mISBN);
         //in the end this value will be assigned by a online db
         b.putExtra(mIsbn10Name,mIsbn_10);

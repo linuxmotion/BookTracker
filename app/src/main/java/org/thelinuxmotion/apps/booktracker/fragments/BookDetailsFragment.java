@@ -37,13 +37,13 @@ public class BookDetailsFragment extends Fragment {
 
     private Book mBook;
     private HeatMapGridAdapter mHeatMapAdapter;
-    ArrayList<BookReadingDetails> mAdapterDays;
-
+    private ArrayList<BookReadingDetails> mAdapterDays;
     private BookDetailsDatabase mDb;
 
     public BookDetailsFragment() {
 
     }
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -55,6 +55,30 @@ public class BookDetailsFragment extends Fragment {
         BookDetailsFragment fragment = new BookDetailsFragment();
         fragment.setArguments(bookData.getExtras());
         return fragment;
+    }
+
+    @NonNull
+    private static ArrayList<BookReadingDetails> getDefaultAdapter() {
+        Calendar now = GregorianCalendar.getInstance();
+        int daysMonth = now.getActualMaximum(Calendar.DAY_OF_MONTH);
+        Log.v(daysMonth + "", "Get Default Adapter");
+        ArrayList<BookReadingDetails> adapterDays = new ArrayList<>();
+        //Create each day in the months for the adapter
+        for (int i = 1; i <= daysMonth; i++) {
+            BookReadingDetails readingDetails = new BookReadingDetails();
+            readingDetails.mDay = i; // set each entries day
+            readingDetails.mDateTime = 0;  // These are all just default
+            readingDetails.mTimeSpentReading = 0;
+            readingDetails.pagesCompleted = 0;
+            adapterDays.add(readingDetails);
+
+        }
+        Log.v("default values set :" + adapterDays.size(), "Get Default Adapter");
+        return adapterDays;
+    }
+
+    public Book getBook() {
+        return mBook;
     }
 
     @Override
@@ -88,30 +112,32 @@ public class BookDetailsFragment extends Fragment {
                 BookDetailsDatabase.class, mBook.mISBN).allowMainThreadQueries().build();
         // We now have the list of book details
         final List<BookReadingDetails> details = mDb.bookDetailsDao().getAll();
-        Log.v(details.size()+ "","Initialize Heatmap details doa size");
+        Log.v(details.size() + "", "Initialize Heatmap details doa size");
         Collections.sort(details, new Comparator<BookReadingDetails>() {
             @Override
             public int compare(BookReadingDetails details1, BookReadingDetails details2) {
 
+
+                //noinspection UseCompareMethod
                 if (details1.mDay == details2.mDay)
                     return 0;
-                if(details1.mDay < details2.mDay)
+                if (details1.mDay < details2.mDay)
                     return -1;
                 else
-                    return 1 ;
+                    return 1;
             }
         });
-        Log.v(details.size()+"","Size after sort");
+        Log.v(details.size() + "", "Size after sort");
 
 
         // Find all book details from the same day and update the book entry for the adapter
         // do this for all the book entries in the current month
         // loop through the entire details list
-        for(int i = 0,j = 1; i < details.size(); i++){
-            Log.v( i + "" ,"Iteration #");
+        for (int i = 0, j = 1; i < details.size(); i++) {
+            Log.v(i + "", "Iteration #");
             BookReadingDetails b = details.get(i);// get the details for each pos
             Log.v(b.mDay + "", "Current day");
-            int pos = b.mDay-1;
+            int pos = b.mDay - 1;
 
             BookReadingDetails bd = mAdapterDays.get(pos);
             bd.pagesCompleted += b.pagesCompleted;
@@ -123,41 +149,11 @@ public class BookDetailsFragment extends Fragment {
 
         // if we hae multiple book from the dame day add all the entries up and give a grad total
         // for that day, fine grain on touch will be implemented later
-        Log.v(mAdapterDays.size() + "","Initilize Heatmap");
+        Log.v(mAdapterDays.size() + "", "Initilize Heatmap");
 
         mHeatMapAdapter.add(mAdapterDays);
 
 
-    }
-
-    @NonNull
-    private static ArrayList<BookReadingDetails> getDefaultAdapter() {
-        Calendar now = GregorianCalendar.getInstance();
-        int daysMonth = now.getActualMaximum(Calendar.DAY_OF_MONTH);
-        Log.v(daysMonth+"","Get Default Adapter");
-        ArrayList<BookReadingDetails> adapterDays = new ArrayList<>();
-        //Create each day in the months for the adapter
-        for (int i = 1; i <= daysMonth; i++){
-            BookReadingDetails readingDetails = new BookReadingDetails();
-            readingDetails.mDay = i; // set each entries day
-            readingDetails.mDateTime = 0;  // These are all just default
-            readingDetails.mTimeSpentReading = 0;
-            readingDetails.pagesCompleted = 0;
-            adapterDays.add(readingDetails);
-
-        }
-        Log.v("default values set :" + adapterDays.size(), "Get Default Adapter");
-        return adapterDays;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     @Nullable
@@ -166,7 +162,7 @@ public class BookDetailsFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
 
         // Inflate the view
-        View v = inflater.inflate(R.layout.book_details_fragment,container,false);
+        View v = inflater.inflate(R.layout.book_details_fragment, container, false);
         //Set all the view's information
         {
             // Sets the book name
@@ -192,8 +188,8 @@ public class BookDetailsFragment extends Fragment {
             addEntry.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                   AddBookDetailsDialog dialog = AddBookDetailsDialog.newInstance();
-                   dialog.show(getFragmentManager(),"Details Dialog");
+                    AddBookDetailsDialog dialog = AddBookDetailsDialog.newInstance();
+                    dialog.show(getFragmentManager(), "Details Dialog");
 
                 }
             });
@@ -212,7 +208,6 @@ public class BookDetailsFragment extends Fragment {
         }
 
 
-
         return v;
     }
 
@@ -223,49 +218,38 @@ public class BookDetailsFragment extends Fragment {
         // Parse the pages completed and total
         int comp = 0;
         int tot = 1;// fallback values
-        try{
+        try {
             comp = Integer.parseInt(mBook.mPagesCompleted);
             tot = Integer.parseInt(mBook.mTotalPages);
-        }
-        catch(NumberFormatException e){
-            Log.e("Progress bar","Could not parse the pages");
-            Log.e("Progress bar",e.getMessage());
+        } catch (NumberFormatException e) {
+            Log.e("Progress bar", "Could not parse the pages");
+            Log.e("Progress bar", e.getMessage());
 
         }
 
         // map the range [0,1] to the interval [0,100]
-        float t = (comp)/(float)(tot);
-        Float progressNum = (100)*(t);
+        float t = (comp) / (float) (tot);
+        Float progressNum = (100) * (t);
         // We should find the total amount of pages read, the total amount of pages
         // and interpolate into a range from 0 to 100
         progress.setProgress(progressNum.intValue()); // set to 50 to see the bar
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
     public void addDetails(BookReadingDetails details) {
 
-            details.mIsbn = Calendar.getInstance().getTime().toString();
-            // add the details to the database
+        details.mIsbn = Calendar.getInstance().getTime().toString();
+        // add the details to the database
 
-        Log.v(details.mIsbn,"Add Details");
-        Log.v(details.mDay + "","Add Details");
-        Log.v(details.mDateTime + "","Add Details");
-        Log.v(details.mTimeSpentReading + "","Add Details");
-        Log.v(details.pagesCompleted + "","Add Details");
+        Log.v(details.mIsbn, "Add Details");
+        Log.v(details.mDay + "", "Add Details");
+        Log.v(details.mDateTime + "", "Add Details");
+        Log.v(details.mTimeSpentReading + "", "Add Details");
+        Log.v(details.pagesCompleted + "", "Add Details");
 
-            mDb.bookDetailsDao().add(details);
-            // update the adapter
-            updateAdapter(details);
-            // We also need to update the UI that we have completed more pages
+        mDb.bookDetailsDao().add(details);
+        // update the adapter
+        updateAdapter(details);
+        // We also need to update the UI that we have completed more pages
 
     }
 
@@ -275,11 +259,11 @@ public class BookDetailsFragment extends Fragment {
 
         int day = details.mDay;
 
-        BookReadingDetails book = mAdapterDays.get(day-1);//mHeatMapAdapter.getItem(day-1);
+        BookReadingDetails book = mAdapterDays.get(day - 1);//mHeatMapAdapter.getItem(day-1);
         //mHeatMapAdapter.remove(book);
         book.mTimeSpentReading += details.mTimeSpentReading;
         book.pagesCompleted += details.pagesCompleted;
-        mAdapterDays.set(day-1,book);
+        mAdapterDays.set(day - 1, book);
         //mHeatMapAdapter.insert(book,day-1);
 
 
@@ -289,6 +273,13 @@ public class BookDetailsFragment extends Fragment {
         // Create the string for the numerical pages
         String pagesText = mBook.mPagesCompleted + "/" + mBook.getTotalPages();
         TextView t = this.getView().findViewById(R.id.display_pages);
+        if (t == null) {
+            Log.e(this.getClass().getName(), "Textview is an empty object");
+            Log.d("updateAdapter()", "Make sure that the inflated view has an object with id R.id.display_pages");
+
+            return;
+        }
+
         t.setText(pagesText);
 
         //mAdapterDays.notify();

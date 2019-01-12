@@ -54,7 +54,7 @@ public class BookShelfFragment extends Fragment {
     private AppDataBase mDb;
     private BookClickedListener mBookClickedListener;
 
-    public class BookClickedListener implements AdapterView.OnItemClickListener {
+    class BookClickedListener implements AdapterView.OnItemClickListener {
 
 
         @Override

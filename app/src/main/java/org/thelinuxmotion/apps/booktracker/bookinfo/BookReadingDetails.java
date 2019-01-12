@@ -14,7 +14,7 @@ public class BookReadingDetails {
 
     // This is the name of the database
     @PrimaryKey
-    public @NonNull String mIsbn;
+    public @NonNull String mIsbn = "";
 
     @ColumnInfo(name = "day")
     public int mDay;

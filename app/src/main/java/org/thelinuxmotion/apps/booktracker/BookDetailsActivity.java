@@ -21,6 +21,7 @@ import org.thelinuxmotion.apps.booktracker.fragments.BookDetailsFragment;
 public class BookDetailsActivity extends AppCompatActivity implements AddBookDetailsDialog.AddBookReadingDialogListener {
 
     private BookDetailsFragment mBookFragment;
+    private Book mBook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,9 +29,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AddBookDet
         setContentView(R.layout.book_activity_layout);
 
 
-        Book b = new Book();
-        b.fromIntent(getIntent());
-        // Intialize the book adapater
+        // Initialize the book adapter
         Toolbar myToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
@@ -56,6 +55,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AddBookDet
     public void onDialogPositiveClick(AddBookDetailsDialog dialog) {
 
         BookReadingDetails details = new BookReadingDetails();
+        details.mIsbn = mBookFragment.getBook().mISBN;
         EditText t = dialog.getDialog().findViewById(R.id.dialog_details_completed);
         details.pagesCompleted =
                 Integer.parseInt(t.getText().toString());

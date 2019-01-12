@@ -21,11 +21,11 @@ import java.util.List;
 public class HeatMapGridAdapter extends ArrayAdapter<BookReadingDetails> {
 
     static class HeatMapColors {
-        static int BLUE = Color.BLUE;
-        static int CYAN = Color.CYAN;
-        static int GREEN = Color.GREEN;
-        static int YELLOW = Color.YELLOW;
-        static int RED = Color.RED;
+        static final int BLUE = Color.BLUE;
+        static final int CYAN = Color.CYAN;
+        static final int GREEN = Color.GREEN;
+        static final int YELLOW = Color.YELLOW;
+        static final int RED = Color.RED;
     }
 
 
@@ -50,17 +50,21 @@ public class HeatMapGridAdapter extends ArrayAdapter<BookReadingDetails> {
 
         BookReadingDetails readingDetails = getItem(position);
 
-        // We should actually interpolater from 0 to 60
-        // with 30 being the green time
-        //TODO: Add color interpolation/changing
-        if(readingDetails.mTimeSpentReading >= 30)
-            imageView.setBackgroundColor(HeatMapColors.GREEN);
-        else if (readingDetails.mTimeSpentReading >= 10)
-            imageView.setBackgroundColor(HeatMapColors.CYAN);
-        else if(readingDetails.mTimeSpentReading > 0)
-            imageView.setBackgroundColor(HeatMapColors.YELLOW);
-        else
-            imageView.setBackgroundColor(HeatMapColors.BLUE);
+        if (readingDetails != null){
+
+            // We should actually interpolater from 0 to 60
+            // with 30 being the green time
+            //TODO: Add color interpolation/changing
+            if(readingDetails.mTimeSpentReading >= 30)
+                imageView.setBackgroundColor(HeatMapColors.GREEN);
+            else if (readingDetails.mTimeSpentReading >= 10)
+                imageView.setBackgroundColor(HeatMapColors.CYAN);
+            else if(readingDetails.mTimeSpentReading > 0)
+                imageView.setBackgroundColor(HeatMapColors.YELLOW);
+            else
+                imageView.setBackgroundColor(HeatMapColors.BLUE);
+        }
+
 
         return imageView;
 

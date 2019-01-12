@@ -1,6 +1,7 @@
 package org.thelinuxmotion.apps.booktracker.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -20,16 +21,16 @@ public class BookAdapter extends ArrayAdapter<Book> {
 
    // ArrayList<Book> mBookList;
 
-    public BookAdapter(Context context, List books) {
-        this(context, R.id.editISBN, books);
+    public BookAdapter(Context context, List<Book> books) {
+
+        super(context, R.layout.fragment_add_book_dialog, books);
     }
 
-    public BookAdapter(Context context, int resource, List books) {
-        super(context, resource, books);
-    }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+
         ImageView imageView;
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
@@ -47,9 +48,9 @@ public class BookAdapter extends ArrayAdapter<Book> {
     }
 
     public void add(List<Book> objects) {
+
         for (Book obj: objects) {
             add(obj);
         }
-
     }
 }

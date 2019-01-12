@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -29,7 +28,6 @@ public class ISBNOnlineDatabase {
      * isbn
      *
      * @param isbn Isbn to perform the search query against
-     * @return
      */
     public void getBookfromOnlineDB(final String isbn, ISBNDBCallbackInterface callback, Context context) {
         //create a book from the ISBN and online db
@@ -43,6 +41,11 @@ public class ISBNOnlineDatabase {
             Log.d(this.getClass().getName(), stringRequest.getHeaders().toString());
         } catch (AuthFailureError error) {
 
+            Log.e(this.getClass().toString(),error.getMessage());
+
+            Log.d("getBookfromOnlineDB(..)","Authentication Failure.");
+
+            return;
         }
 
         // Add the request to the RequestQueue.
@@ -60,15 +63,15 @@ public class ISBNOnlineDatabase {
 
         ISBNDBCallbackInterface mCallBack;
 
-        public ISBNDBRequest(String isbn, ISBNDBCallbackInterface callback) {
-            this(Request.Method.GET,
+        ISBNDBRequest(String isbn, ISBNDBCallbackInterface callback) {
+            this(
                     "https://api.isbndb.com/book/" + isbn,
                     new ISBNDBResponseListener(callback),
                     new ISBNDBErrorListener());
         }
 
-        public ISBNDBRequest(int method, String url, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener) {
-            super(method, url, listener, errorListener);
+        ISBNDBRequest(String url, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener) {
+            super(Method.GET, url, listener, errorListener);
         }
 
         @Override
@@ -81,7 +84,7 @@ public class ISBNOnlineDatabase {
 
             super.getHeaders();
             Log.d(this.getClass().getName(), "Setting headers");
-            Map<String, String> params = new HashMap<String, String>();
+            Map<String, String> params = new HashMap<>();
             //params.put("Content-Type","application/json");
             params.put("X-API-KEY", "LDh9APouch4RDsPxCPUZK2zSsFhofYFN11XFxqWY");
             params.put("Host", "api.isbndb.com");
@@ -107,7 +110,7 @@ public class ISBNOnlineDatabase {
 
         private final ISBNDBCallbackInterface mCallback;
 
-        public ISBNDBResponseListener(ISBNDBCallbackInterface callback) {
+        ISBNDBResponseListener(ISBNDBCallbackInterface callback) {
             mCallback = callback;
         }
 
@@ -126,7 +129,7 @@ public class ISBNOnlineDatabase {
         }
 
         private ArrayList<Book> getBooksFromResponse(String response) {
-            ArrayList<Book> Books = new ArrayList<Book>();
+            ArrayList<Book> Books = new ArrayList<>();
 
             try {
                 // The main JSON body
@@ -149,7 +152,7 @@ public class ISBNOnlineDatabase {
 
             } catch (JSONException execption) {
                 // remove all books from the list, it may be corrupted
-                Books = new ArrayList<Book>();
+                Books = new ArrayList<>();
             }
 
             return Books;

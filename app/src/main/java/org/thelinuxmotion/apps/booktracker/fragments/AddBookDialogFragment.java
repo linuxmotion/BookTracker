@@ -6,10 +6,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import org.thelinuxmotion.apps.booktracker.R;
 
@@ -61,8 +61,10 @@ public class AddBookDialogFragment extends DialogFragment {
         return fragment;
     }
 
+
+    @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(@NonNull Bundle savedInstanceState) {
 
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -98,12 +100,6 @@ public class AddBookDialogFragment extends DialogFragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
- return super.onCreateView(inflater,container,savedInstanceState);
     }
 
 

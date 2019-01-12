@@ -7,11 +7,10 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
@@ -69,11 +68,7 @@ public class AddBookDetailsDialog extends DialogFragment
         mListener = null;
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -137,16 +132,6 @@ public class AddBookDetailsDialog extends DialogFragment
 
     }
 
-
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-       // View layout = inflater.inflate(R.layout.reading_details_dialog_fragment_layout,container,false);
-
-
-        return super.onCreateView(inflater, container, savedInstanceState);
-    }
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
