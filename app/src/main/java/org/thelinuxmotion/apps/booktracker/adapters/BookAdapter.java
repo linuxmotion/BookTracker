@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
-import org.thelinuxmotion.apps.booktracker.bookinfo.Book;
+import org.thelinuxmotion.apps.booktracker.Isbndb.models.Book;
 import org.thelinuxmotion.apps.booktracker.R;
 
 import java.util.List;

@@ -9,7 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.EditText;
 
-import org.thelinuxmotion.apps.booktracker.bookinfo.Book;
+import org.thelinuxmotion.apps.booktracker.Isbndb.models.Book;
 import org.thelinuxmotion.apps.booktracker.bookinfo.BookReadingDetails;
 import org.thelinuxmotion.apps.booktracker.fragments.AddBookDetailsDialog;
 import org.thelinuxmotion.apps.booktracker.fragments.BookDetailsFragment;

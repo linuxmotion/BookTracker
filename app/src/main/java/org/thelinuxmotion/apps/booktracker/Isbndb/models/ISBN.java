@@ -1,4 +1,4 @@
-package org.thelinuxmotion.apps.booktracker.bookinfo;
+package org.thelinuxmotion.apps.booktracker.Isbndb.models;
 
 import java.util.ArrayList;
 

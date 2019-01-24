@@ -16,7 +16,7 @@ import android.widget.GridView;
 import org.thelinuxmotion.apps.booktracker.BookDetailsActivity;
 import org.thelinuxmotion.apps.booktracker.R;
 import org.thelinuxmotion.apps.booktracker.adapters.BookAdapter;
-import org.thelinuxmotion.apps.booktracker.bookinfo.Book;
+import org.thelinuxmotion.apps.booktracker.Isbndb.models.Book;
 import org.thelinuxmotion.apps.booktracker.persistence.AppDataBase;
 
 import java.util.ArrayList;

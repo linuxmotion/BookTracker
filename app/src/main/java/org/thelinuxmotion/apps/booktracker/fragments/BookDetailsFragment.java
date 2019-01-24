@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import org.thelinuxmotion.apps.booktracker.R;
 import org.thelinuxmotion.apps.booktracker.adapters.HeatMapGridAdapter;
-import org.thelinuxmotion.apps.booktracker.bookinfo.Book;
+import org.thelinuxmotion.apps.booktracker.Isbndb.models.Book;
 import org.thelinuxmotion.apps.booktracker.bookinfo.BookReadingDetails;
 import org.thelinuxmotion.apps.booktracker.persistence.BookDetailsDatabase;
 
@@ -171,12 +171,12 @@ public class BookDetailsFragment extends Fragment {
 
             // Set the isbn
             TextView isbn = v.findViewById(R.id.display_isbn);
-            isbn.setText(mBook.getIsbn_13());
+            isbn.setText(mBook.mIsbn_13);
 
             //Set the pages completed and total
             TextView pages = v.findViewById(R.id.display_pages);
             // Create the string for the numerical pages
-            String pagesText = mBook.mPagesCompleted + "/" + mBook.getTotalPages();
+            String pagesText = mBook.mPagesCompleted + "/" + mBook.mNumPages;
             pages.setText(pagesText);
 
             // Set the gridview adapter
@@ -220,7 +220,7 @@ public class BookDetailsFragment extends Fragment {
         int tot = 1;// fallback values
         try {
             comp = Integer.parseInt(mBook.mPagesCompleted);
-            tot = Integer.parseInt(mBook.mTotalPages);
+            tot = Integer.parseInt(mBook.mNumPages);
         } catch (NumberFormatException e) {
             Log.e("Progress bar", "Could not parse the pages");
             Log.e("Progress bar", e.getMessage());
@@ -271,7 +271,7 @@ public class BookDetailsFragment extends Fragment {
         //mBook.
         // Update the UI now
         // Create the string for the numerical pages
-        String pagesText = mBook.mPagesCompleted + "/" + mBook.getTotalPages();
+        String pagesText = mBook.mPagesCompleted + "/" + mBook.mNumPages;
         TextView t = this.getView().findViewById(R.id.display_pages);
         if (t == null) {
             Log.e(this.getClass().getName(), "Textview is an empty object");

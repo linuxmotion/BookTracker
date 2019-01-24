@@ -1,7 +1,7 @@
 package org.thelinuxmotion.apps.booktracker;
 
 import org.junit.Test;
-import org.thelinuxmotion.apps.booktracker.bookinfo.ISBN;
+import org.thelinuxmotion.apps.booktracker.Isbndb.models.ISBN;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

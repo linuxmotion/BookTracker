@@ -3,7 +3,7 @@ package org.thelinuxmotion.apps.booktracker.persistence;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.RoomDatabase;
 
-import org.thelinuxmotion.apps.booktracker.bookinfo.Book;
+import org.thelinuxmotion.apps.booktracker.Isbndb.models.Book;
 
 /**
  * Created by jweyr on 2/3/2018.

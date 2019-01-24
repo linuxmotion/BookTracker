@@ -9,8 +9,8 @@ import android.view.MenuItem;
 import android.widget.EditText;
 
 import org.thelinuxmotion.apps.booktracker.Isbndb.ISBNOnlineDatabase;
-import org.thelinuxmotion.apps.booktracker.bookinfo.Book;
-import org.thelinuxmotion.apps.booktracker.bookinfo.ISBN;
+import org.thelinuxmotion.apps.booktracker.Isbndb.models.Book;
+import org.thelinuxmotion.apps.booktracker.Isbndb.models.ISBN;
 import org.thelinuxmotion.apps.booktracker.fragments.AddBookDialogFragment;
 import org.thelinuxmotion.apps.booktracker.fragments.BookShelfFragment;
 
