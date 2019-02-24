@@ -52,14 +52,16 @@ public class HeatMapGridAdapter extends ArrayAdapter<BookReadingDetails> {
 
         if (readingDetails != null){
 
+            long timespent = readingDetails.mTimeSpentReading;
             // We should actually interpolater from 0 to 60
             // with 30 being the green time
             //TODO: Add color interpolation/changing
-            if(readingDetails.mTimeSpentReading >= 30)
+
+            if (timespent >= 30)
                 imageView.setBackgroundColor(HeatMapColors.GREEN);
-            else if (readingDetails.mTimeSpentReading >= 10)
+            else if (timespent >= 10)
                 imageView.setBackgroundColor(HeatMapColors.CYAN);
-            else if(readingDetails.mTimeSpentReading > 0)
+            else if (timespent > 0)
                 imageView.setBackgroundColor(HeatMapColors.YELLOW);
             else
                 imageView.setBackgroundColor(HeatMapColors.BLUE);

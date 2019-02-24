@@ -24,87 +24,87 @@ public class Book {
 
     @ColumnInfo(name = "BOOK_TITLE")
     public String mBookTitle;
-    public final static String mBookTitleName = "BOOK_TITLE";
+    public final static String mBookTitleName = "title";
 
     @ColumnInfo(name = "BOOK_TITLE_LONG")
     public String mBookTitleLong;
-    public final static String mBookTitleLongName = "BOOK_TITLE_LONG";
+    public final static String mBookTitleLongName = "title_long";
 
     @ColumnInfo(name = "ISBN_10")
     public String mIsbn_10;
-    public final static String mIsbn10Name = "ISBN_10";
+    public final static String mIsbn10Name = "isbn";
 
     @ColumnInfo(name = "ISBN_13")
     public String mIsbn_13;
-    public final static String mIsbn13Name = "ISBN_13";
+    public final static String mIsbn13Name = "isbn13";
 
     @ColumnInfo(name = "Dewey_Decimal ")
     public String mDeweyDecimal;
-    public final static String mDeweyDecimalName = "DeweyDecimal";
+    public final static String mDeweyDecimalName = "dewey_decimal";
 
     @ColumnInfo(name = "Format")
     public String mFormat;
-    public final static String mFormatName = "Format";
+    public final static String mFormatName = "format";
 
     @ColumnInfo(name = "Image")
     public String mImage;
-    public final static String mImageName = "Image";
+    public final static String mImageName = "image";
 
     @ColumnInfo(name = "MSRP")
     public String mMsrp;
-    public final static String mMsrpName = "MSRP";
+    public final static String mMsrpName = "msrp";
 
     @ColumnInfo(name = "Binding")
     public String mBinding;
-    public final static String mBindingName = "Binding";
+    public final static String mBindingName = "binding";
 
     @ColumnInfo(name = "Publisher")
     public String mPublisher;
-    public final static String mPublisherName = "Publisher";
+    public final static String mPublisherName = "publisher";
 
     @ColumnInfo(name = "Language")
     public String mLanguage;
-    public final static String mLanguageName = "Language";
+    public final static String mLanguageName = "language";
 
     @ColumnInfo(name = "Publish_date")
     public String mDatePublished;
-    public final static String mDatePublishedName = "Publish_date";
+    public final static String mDatePublishedName = "date_published";
 
     @ColumnInfo(name = "Edition")
     public String mEdition;
-    public final static String mEditionName = "Edition";
+    public final static String mEditionName = "edition";
 
     @ColumnInfo(name = "Pages")
     public String mNumPages;
-    public final static String mNumPagesName = "Number_of_Pages";
+    public final static String mNumPagesName = "pages";
 
     @ColumnInfo(name = "Dimensions")
     public String mDimensions;
-    public final static String mDimensionsName = "Dimensions";
+    public final static String mDimensionsName = "dimensions";
 
     @ColumnInfo(name = "Overview")
     public String mOverview;
-    public final static String mOverviewName = "Overview";
+    public final static String mOverviewName = "overview";
 
     @ColumnInfo(name = "Excerpt")
     public String mExcerpt;
-    public final static String mExcerptName = "Excerpt";
+    public final static String mExcerptName = "excerpt";
 
     @ColumnInfo(name = "Synopsys")
     public String mSynopsys;
-    public final static String mSynopsysName = "Synopsys";
+    public final static String mSynopsysName = "synopsys";
 
     @ColumnInfo(name = "Authors")
     public String mAuthors;
-    public final static String mAuthorName = "Authors";
+    public final static String mAuthorName = "authors";
 
     @ColumnInfo(name = "Subjects")
     public String mSubjects;
-    public final static String mSubjectsName = "Subjects";
+    public final static String mSubjectsName = "subjects";
 
     @ColumnInfo(name = "Reviews")
     public String mReviews;
-    public final static String mReviewsName = "Reviews";
+    public final static String mReviewsName = "reviews";
 
     @ColumnInfo(name = "Pages_Completed")
     public String mPagesCompleted;

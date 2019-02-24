@@ -8,6 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
+
 import org.thelinuxmotion.apps.booktracker.Isbndb.models.Book;
 import org.thelinuxmotion.apps.booktracker.R;
 
@@ -44,6 +46,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
         }
 
         imageView.setImageResource(R.drawable.book_generic_213x);
+        Picasso.get().load(this.getItem(position).mImage).into(imageView);
         return imageView;
     }
 

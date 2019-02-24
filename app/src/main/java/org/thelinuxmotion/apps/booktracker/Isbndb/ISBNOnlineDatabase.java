@@ -30,10 +30,11 @@ public class ISBNOnlineDatabase {
      *
      * @param isbn Isbn to perform the search query against
      */
-    String mApiKey = "";
+    private String mApiKey = "";
     public void getBookfromOnlineDB(final String isbn, ISBNDBCallbackInterface callback, Context context) {
 
         mApiKey = context.getString(R.string.api_key);
+        //9780134706054
         //create a book from the ISBN and online db
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -42,7 +43,7 @@ public class ISBNOnlineDatabase {
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
-        queue.start();
+        // queue.start();
 
     }
 
@@ -53,13 +54,11 @@ public class ISBNOnlineDatabase {
 
     private class ISBNDBRequest extends StringRequest {
 
-        ISBNDBCallbackInterface mCallBack;
-
         ISBNDBRequest(String isbn, ISBNDBCallbackInterface callback) {
             this(
                     "https://api.isbndb.com/book/" + isbn,
                     new ISBNDBResponseListener(callback),
-                    new ISBNDBErrorListener());
+                    new ISBNDBErrorListener(callback));
         }
 
         ISBNDBRequest(String url, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener) {
@@ -87,14 +86,26 @@ public class ISBNOnlineDatabase {
     }
 
     private class ISBNDBErrorListener implements Response.ErrorListener {
+        private final ISBNDBCallbackInterface mCallback;
+
+        ISBNDBErrorListener(ISBNDBCallbackInterface callback) {
+            mCallback = callback;
+        }
         @Override
         public void onErrorResponse(VolleyError error) {
-            String TAG = "ErrorListener";
+            String TAG = "ISBNDBErrorListener";
             Log.e(TAG, "We've encountered an error.");
-            if (error.getMessage() != null) {
-                Log.e("ISBNOnlineDatabase", error.getMessage());
+            if (error != null) {
+                if (error.getMessage() != null)
+                    Log.e("ISBNOnlineDatabase", error.getMessage());
+                StackTraceElement[] trace = error.getStackTrace();
+                for (StackTraceElement elm : trace) {
+                    Log.e(TAG, elm.getMethodName() + "(" + elm.getLineNumber() + ")");
+                }
+                Log.e(TAG, "onErrorResponse: network response code" + error.networkResponse.statusCode);
 
             }
+            mCallback.OnReturnBook(null); // return a null book to signal we were not able to add it
         }
     }
 
@@ -165,7 +176,7 @@ public class ISBNOnlineDatabase {
                 // one does not exist for the value provided
                 JSONObject obj = json.optJSONObject("book");
                 if (obj == null)
-                    return null; // return a blank book as a result
+                    return null; // return a null book as a result
 
                 setBookFromJSONObject(b, obj);
             } catch (Exception e) {
@@ -173,16 +184,16 @@ public class ISBNOnlineDatabase {
                 // Log.v("Book Response", e.toString());
                 Log.e("Book Response", e.getMessage());
                 //Log.i("JSON", e.getStackTrace().);
-                return new Book(); // Return a blank book to the user
+                return null; // Return a null. book to the user
             }
             return b;
         }
 
         private void setBookFromJSONObject(Book b, JSONObject obj) throws JSONException {
 
-            b.mIsbn_13 = obj.optString(Book.mIsbn13Name);
-            b.mIsbn_10 = obj.optString(Book.mIsbn10Name);
-            // If both ISBN's are set and are the same ISBN it means that no ISBN
+            b.mIsbn_13 = obj.optString(Book.mIsbn13Name, "");
+            b.mIsbn_10 = obj.optString(Book.mIsbn10Name, "");
+            // If both ISBN's are set and are the same blank ISBN it means that no ISBN
             // could be parsed from the retrieved object. Since no isbn can be parsed
             // throw an exception to notify the calling code.
             if (b.mIsbn_10.equals(b.mIsbn_13))

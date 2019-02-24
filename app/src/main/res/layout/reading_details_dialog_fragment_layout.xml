@@ -7,50 +7,17 @@
     android:layout_height="match_parent"
     tools:layout_editor_absoluteY="25dp">
 
-
-    <EditText
-        android:id="@+id/dialog_details_time_spent"
+    <TextView
+        android:id="@+id/details_name_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:autofillHints="@string/time_spent_hint"
-        android:ems="10"
-        android:hint="@string/enter_time_spent"
-        android:inputType="number"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/dialog_details_time"
-        app:layout_constraintTop_toBottomOf="@+id/dialog_details_time"
-        tools:targetApi="o" />
-
-    <EditText
-        android:id="@+id/dialog_details_completed"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:autofillHints="@string/pages_completed_hint"
-        android:ems="10"
-        android:hint="@string/enter_pages_completed"
-        android:inputType="number"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/dialog_details_time_spent"
-        app:layout_constraintTop_toBottomOf="@+id/dialog_details_time_spent"
-        tools:targetApi="o" />
-
-    <EditText
-        android:id="@+id/dialog_details_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="23dp"
-        android:autofillHints="@string/enter_time_hint"
-        android:clickable="true"
-        android:ems="10"
-        android:focusable="true"
-        android:hint="@string/enter_time"
-        android:inputType="number"
-        android:longClickable="false"
-        app:layout_constraintStart_toStartOf="@+id/dialog_details_date"
-        app:layout_constraintTop_toBottomOf="@+id/dialog_details_date"
-        tools:targetApi="o" />
+        android:layout_height="41dp"
+        android:layout_marginTop="8dp"
+        android:inputType="none"
+        android:text="@string/enter_reading_details"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/dialog_details_date"
@@ -72,17 +39,49 @@
         app:layout_constraintTop_toBottomOf="@+id/details_name_view"
         tools:targetApi="o" />
 
-    <TextView
-        android:id="@+id/details_name_view"
+    <EditText
+        android:id="@+id/dialog_details_time_start"
         android:layout_width="wrap_content"
-        android:layout_height="41dp"
-        android:layout_marginTop="8dp"
-        android:inputType="none"
-        android:text="@string/enter_reading_details"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
+        android:autofillHints="@string/start_time_hint"
+        android:clickable="true"
+        android:ems="10"
+        android:focusable="true"
+        android:hint="@string/enter_start_time"
+        android:inputType="time"
+        android:longClickable="false"
+        app:layout_constraintStart_toStartOf="@+id/dialog_details_date"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_details_date"
+        tools:targetApi="o" />
+
+    <EditText
+        android:id="@+id/dialog_details_time_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:autofillHints="@string/end_time_hint"
+        android:ems="10"
+        android:hint="@string/enter_end_time"
+        android:inputType="time"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/dialog_details_time_start"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_details_time_start"
+        tools:targetApi="o" />
+
+    <EditText
+        android:id="@+id/dialog_details_pages_completed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:autofillHints="@string/pages_completed_hint"
+        android:ems="10"
+        android:hint="@string/enter_pages_completed"
+        android:inputType="number"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/dialog_details_time_end"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_details_time_end"
+        tools:targetApi="o" />
 
 
 </android.support.constraint.ConstraintLayout>

@@ -5,13 +5,18 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
+
+import com.google.android.gms.common.api.CommonStatusCodes;
 
 import org.thelinuxmotion.apps.booktracker.R;
+import org.thelinuxmotion.apps.booktracker.barcodereader.BarcodeCaptureActivity;
 
 /**
  * A dialog to prompt the user to enter an the isbn of a book, the
@@ -35,6 +40,7 @@ public class AddBookDialogFragment extends DialogFragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private EditText mISBN;
 
     private OnAddBookDialogListener mListener;
 
@@ -72,6 +78,16 @@ public class AddBookDialogFragment extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         final View fields = inflater.inflate(R.layout.fragment_add_book_dialog, null);
+        mISBN = fields.findViewById(R.id.editISBN);
+        fields.findViewById(R.id.scan_isbn_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), org.thelinuxmotion.apps.booktracker.barcodereader.MainActivity.class);
+                startActivityForResult(intent, CAMERA_ISBN);
+            }
+        });
+
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
         builder.setView(fields)
@@ -120,6 +136,35 @@ public class AddBookDialogFragment extends DialogFragment {
         mListener = null;
     }
 
+    public void setISBN(String isbn) {
+
+        mISBN.setText(isbn);
+        notify();
+    }
+
+    private static int CAMERA_ISBN = 0;
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == CAMERA_ISBN) {
+            // do some stuff with the retrning class being the camera sibn
+            if (requestCode == CommonStatusCodes.SUCCESS) {
+
+                String barcode = data.getStringExtra(BarcodeCaptureActivity.BarcodeObject);
+                mISBN.setText(barcode);
+
+            } else if (requestCode == CommonStatusCodes.CANCELED) {
+
+
+            }
+
+
+        }
+
+
+    }
 
     /**
      * This interface must be implemented by activities that contain this

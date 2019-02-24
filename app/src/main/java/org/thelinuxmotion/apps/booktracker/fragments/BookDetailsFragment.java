@@ -12,15 +12,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
+import org.thelinuxmotion.apps.booktracker.Isbndb.models.Book;
 import org.thelinuxmotion.apps.booktracker.R;
 import org.thelinuxmotion.apps.booktracker.adapters.HeatMapGridAdapter;
-import org.thelinuxmotion.apps.booktracker.Isbndb.models.Book;
 import org.thelinuxmotion.apps.booktracker.bookinfo.BookReadingDetails;
 import org.thelinuxmotion.apps.booktracker.persistence.BookDetailsDatabase;
 
+import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -39,9 +44,21 @@ public class BookDetailsFragment extends Fragment {
     private HeatMapGridAdapter mHeatMapAdapter;
     private ArrayList<BookReadingDetails> mAdapterDays;
     private BookDetailsDatabase mDb;
+    // Maintain a reference to the month so that we can change it later on in the case
+    // of viewing data not from the current month
+    private TextView mMonth;
 
     public BookDetailsFragment() {
 
+    }
+
+    public void PreInitialize(Intent book) {
+
+        // Intitalize the book
+        mBook = new Book();
+
+        // Now get the argument and set the as the book paramaters
+        mBook.fromIntent(book);
     }
 
     /**
@@ -54,21 +71,29 @@ public class BookDetailsFragment extends Fragment {
     public static BookDetailsFragment newInstance(Intent bookData) {
         BookDetailsFragment fragment = new BookDetailsFragment();
         fragment.setArguments(bookData.getExtras());
+        fragment.PreInitialize(bookData);
+
         return fragment;
     }
 
     @NonNull
-    private static ArrayList<BookReadingDetails> getDefaultAdapter() {
+    private ArrayList<BookReadingDetails> getDefaultAdapter() {
         Calendar now = GregorianCalendar.getInstance();
         int daysMonth = now.getActualMaximum(Calendar.DAY_OF_MONTH);
         Log.v(daysMonth + "", "Get Default Adapter");
         ArrayList<BookReadingDetails> adapterDays = new ArrayList<>();
         //Create each day in the months for the adapter
         for (int i = 1; i <= daysMonth; i++) {
-            BookReadingDetails readingDetails = new BookReadingDetails();
+            // Use the isbn for the book as a deafult value for the key
+            // This is not saved in the database and is the key so that
+            // we can check if the key is the isbn and take the appropriate action
+            BookReadingDetails readingDetails = new BookReadingDetails(Long.parseLong(mBook.mISBN));
+
+
             readingDetails.mDay = i; // set each entries day
             readingDetails.mDateTime = 0;  // These are all just default
-            readingDetails.mTimeSpentReading = 0;
+            readingDetails.mTimeStartedReading = 0;
+            readingDetails.mTimeStopedReading = 0;
             readingDetails.pagesCompleted = 0;
             adapterDays.add(readingDetails);
 
@@ -84,14 +109,6 @@ public class BookDetailsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Intent t = new Intent();
-        t.putExtras(getArguments());
-        // Intitalize the book
-        mBook = new Book();
-
-        // Now get the argument and set the as the book paramaters
-        mBook.fromIntent(t);
 
         // init heatmap
         InitializeHeatmapAdapter();
@@ -165,6 +182,8 @@ public class BookDetailsFragment extends Fragment {
         View v = inflater.inflate(R.layout.book_details_fragment, container, false);
         //Set all the view's information
         {
+            ImageView cover = v.findViewById(R.id.book_image);
+            Picasso.get().load(mBook.mImage).into(cover);
             // Sets the book name
             TextView bookname = v.findViewById(R.id.display_book_name);
             bookname.setText(mBook.mBookTitle);
@@ -173,11 +192,6 @@ public class BookDetailsFragment extends Fragment {
             TextView isbn = v.findViewById(R.id.display_isbn);
             isbn.setText(mBook.mIsbn_13);
 
-            //Set the pages completed and total
-            TextView pages = v.findViewById(R.id.display_pages);
-            // Create the string for the numerical pages
-            String pagesText = mBook.mPagesCompleted + "/" + mBook.mNumPages;
-            pages.setText(pagesText);
 
             // Set the gridview adapter
             GridView map = v.findViewById(R.id.heatmapgrid);
@@ -194,16 +208,37 @@ public class BookDetailsFragment extends Fragment {
                 }
             });
 
-            /*map.setOnItemClickListener(new GridView.OnItemClickListener(){
-;
 
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            mMonth = v.findViewById(R.id.monthtext);
+            int month = Calendar.getInstance().get(Calendar.MONTH);
+            mMonth.setText(getMonth(month));
 
+            //Set the pages completed and total
+            TextView pages = v.findViewById(R.id.display_pages);
+            // Create the string for the numerical pages
+            ProgressBar pbar = v.findViewById(R.id.book_completion_progress_bar);
+            try {
+                int total = Integer.parseInt(mBook.mNumPages);
+                int progress = Integer.parseInt(mBook.mPagesCompleted);
+
+                // We should check to see if there is more completed pages than pages
+                // that are able to be read, until then we just make that we have at least
+                // one page that we can read
+
+                if (total > 0) // we need to have more than no pages
+                {
+                    String pagesText = mBook.mPagesCompleted + "/" + mBook.mNumPages;
+                    pages.setText(pagesText);
+                    setProgressBar(pbar, progress, total); // we only set the progress bar if we have two valid
+                    // integers. One for the progress and another for the total.
                 }
-            });*/
+            } catch (NumberFormatException e) {
 
-            setProgressBar(v);
+                pbar.setVisibility(View.INVISIBLE);
+                pages.setVisibility(View.INVISIBLE);
+                // don't set the view
+            }
+
 
         }
 
@@ -211,40 +246,46 @@ public class BookDetailsFragment extends Fragment {
         return v;
     }
 
-    private void setProgressBar(View v) {
-        // Get a reference to the progress bar
-        ProgressBar progress = v.findViewById(R.id.book_completion_progress_bar);
+    private String getMonth(int month) {
 
-        // Parse the pages completed and total
-        int comp = 0;
-        int tot = 1;// fallback values
-        try {
-            comp = Integer.parseInt(mBook.mPagesCompleted);
-            tot = Integer.parseInt(mBook.mNumPages);
-        } catch (NumberFormatException e) {
-            Log.e("Progress bar", "Could not parse the pages");
-            Log.e("Progress bar", e.getMessage());
+        String[] months = DateFormatSymbols.getInstance().getMonths();
+        return months[month];
+    }
 
-        }
+    private void setProgressBar(ProgressBar pbar, int progress, int total) {
 
         // map the range [0,1] to the interval [0,100]
-        float t = (comp) / (float) (tot);
+        float t = (progress) / (float) (total);
         Float progressNum = (100) * (t);
         // We should find the total amount of pages read, the total amount of pages
         // and interpolate into a range from 0 to 100
-        progress.setProgress(progressNum.intValue()); // set to 50 to see the bar
+        pbar.setProgress(progressNum.intValue()); // set the found integer percentage
     }
 
+    /**
+     * Add the details to the database for the current book
+     * The method will automatically set the key
+     * for the details even if it was set. The key is the next size, ie. size + 1
+     *
+     * @param details The book details to add
+     */
     public void addDetails(BookReadingDetails details) {
 
-        details.mIsbn = Calendar.getInstance().getTime().toString();
+        //details.mKey = Calendar.getInstance().getTime().getTime();
         // add the details to the database
 
-        Log.v(details.mIsbn, "Add Details");
+        Log.v(details.mKey + "", "Add Details");
         Log.v(details.mDay + "", "Add Details");
         Log.v(details.mDateTime + "", "Add Details");
-        Log.v(details.mTimeSpentReading + "", "Add Details");
+        Log.v(details.mTimeStartedReading + "", "Add Details");
+        Log.v(details.mTimeStopedReading + "", "Add Details");
         Log.v(details.pagesCompleted + "", "Add Details");
+
+        //TODO: Assign a key that will always be unique
+        //in this case removing and entry and adding another one will assign the same key twice possibly
+        //
+        int size = mDb.bookDetailsDao().getAll().size();
+        details.mKey = size + 1;
 
         mDb.bookDetailsDao().add(details);
         // update the adapter
@@ -267,7 +308,8 @@ public class BookDetailsFragment extends Fragment {
         //mHeatMapAdapter.insert(book,day-1);
 
 
-        mBook.mPagesCompleted = "" + (details.pagesCompleted + Integer.parseInt(mBook.mPagesCompleted));// Set the global UI pages completed
+        int progress = (details.pagesCompleted + Integer.parseInt(mBook.mPagesCompleted));
+        mBook.mPagesCompleted = "" + progress;// Set the global UI pages completed
         //mBook.
         // Update the UI now
         // Create the string for the numerical pages
@@ -284,7 +326,17 @@ public class BookDetailsFragment extends Fragment {
 
         //mAdapterDays.notify();
         mHeatMapAdapter.notifyDataSetChanged();
-        setProgressBar(getView());
+        try {
+            setProgressBar((ProgressBar) getView().findViewById(R.id.book_completion_progress_bar), progress, Integer.parseInt(mBook.mNumPages));
+        } catch (NumberFormatException e) {
+
+            Toast.makeText(this.getContext(),
+                    "Could not set the progress bar on update, " +
+                            "please contact me at linuxmotion@gmail.com",
+                    Toast.LENGTH_SHORT).show();
+
+
+        }
 
     }
 }

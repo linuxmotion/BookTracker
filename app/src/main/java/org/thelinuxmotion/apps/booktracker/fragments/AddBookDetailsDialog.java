@@ -28,7 +28,7 @@ public class AddBookDetailsDialog extends DialogFragment
 
     private AddBookReadingDialogListener mListener;
     private EditText mDate;
-    private EditText mTime;
+    private EditText mTimeStart;
 
     public AddBookDetailsDialog() {
         super();
@@ -85,33 +85,61 @@ public class AddBookDetailsDialog extends DialogFragment
             public void onClick(View view) {
                 // We should create a datepicker dialog that return the date
                 Calendar c = Calendar.getInstance();
-               DatePickerDialog dialog
-                       = new DatePickerDialog(AddBookDetailsDialog.this.getContext(),
-                       AddBookDetailsDialog.this,
-                       c.get(Calendar.YEAR),
-                       c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
-               dialog.show();
+                DatePickerDialog dialog
+                        = new DatePickerDialog(AddBookDetailsDialog.this.getContext(),
+                        AddBookDetailsDialog.this,
+                        c.get(Calendar.YEAR),
+                        c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+                dialog.show();
 
             }
         });
 
-        mTime = layout.findViewById(R.id.dialog_details_time);
-        mTime.setOnClickListener(new View.OnClickListener() {
+        mTimeStart = layout.findViewById(R.id.dialog_details_time_start);
+        mTimeStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Calendar c =  Calendar.getInstance();
+                Calendar c = Calendar.getInstance();
                 TimePickerDialog dialog
                         = new TimePickerDialog(AddBookDetailsDialog.this.getContext(),
-                        AddBookDetailsDialog.this,
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                mTimeStart.setText(hourOfDay + ":" + minute);
+                            }
+                        },
                         c.get(Calendar.HOUR),
                         c.get(Calendar.MINUTE),
                         false);
                 dialog.show();
             }
         });
-        
-        EditText pages = layout.findViewById(R.id.dialog_details_completed);
-        EditText spent = layout.findViewById(R.id.dialog_details_time_spent);
+
+
+        final EditText end_time = layout.findViewById(R.id.dialog_details_time_end);
+        end_time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar c = Calendar.getInstance();
+                TimePickerDialog dialog
+                        = new TimePickerDialog(AddBookDetailsDialog.this.getContext(),
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                end_time.setText(hourOfDay + ":" + minute);
+                            }
+                        },
+                        c.get(Calendar.HOUR),
+                        c.get(Calendar.MINUTE),
+                        false);
+                dialog.show();
+            }
+        });
+
+
+        EditText pages = layout.findViewById(R.id.dialog_details_pages_completed);
+
+
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
         builder.setView(layout)
@@ -141,9 +169,11 @@ public class AddBookDetailsDialog extends DialogFragment
 
     @Override
     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-        mTime.setText(hour+ ":" + minute + "");
+
+        mTimeStart.setText(hour + ":" + minute + "");
 
     }
+
 
     public interface AddBookReadingDialogListener{
 
