@@ -1,12 +1,14 @@
 package org.thelinuxmotion.apps.booktracker.adapters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
 
 import com.squareup.picasso.Picasso;
 
@@ -25,7 +27,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
 
     public BookAdapter(Context context, List<Book> books) {
 
-        super(context, R.layout.fragment_add_book_dialog, books);
+        super(context, R.layout.bookshelf_adapter_layout, books);
     }
 
 
@@ -36,16 +38,15 @@ public class BookAdapter extends ArrayAdapter<Book> {
         ImageView imageView;
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
-            imageView = new ImageView(parent.getContext());
-            imageView.setLayoutParams(new GridView.LayoutParams(213, 300));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(8, 8, 8, 16);
-            imageView.setFocusable(false);
+            imageView = (ImageView) LayoutInflater.
+                    from(this.getContext()).inflate(R.layout.bookshelf_adapter_layout, null);
+            imageView.setLayoutParams(new GridView.LayoutParams(300, 400));
+
         } else {
             imageView = (ImageView) convertView;
         }
 
-        imageView.setImageResource(R.drawable.book_generic_213x);
+        //imageView.setImageResource(R.drawable.book_generic_213x);
         Picasso.get().load(this.getItem(position).mImage).into(imageView);
         return imageView;
     }

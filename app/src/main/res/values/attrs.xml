@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="calendarViewStyle" format="reference" />
+
+
+
+    <declare-styleable name="TextAppearance">
+        <attr name="Small" format="integer">12</attr>
+    </declare-styleable>
+
+</resources>

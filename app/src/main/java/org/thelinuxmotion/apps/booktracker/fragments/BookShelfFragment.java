@@ -1,11 +1,9 @@
 package org.thelinuxmotion.apps.booktracker.fragments;
 
-import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +11,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import androidx.fragment.app.Fragment;
+import androidx.room.Room;
+
 import org.thelinuxmotion.apps.booktracker.BookDetailsActivity;
+import org.thelinuxmotion.apps.booktracker.Isbndb.models.Book;
 import org.thelinuxmotion.apps.booktracker.R;
 import org.thelinuxmotion.apps.booktracker.adapters.BookAdapter;
-import org.thelinuxmotion.apps.booktracker.Isbndb.models.Book;
 import org.thelinuxmotion.apps.booktracker.persistence.AppDataBase;
 
 import java.util.ArrayList;
@@ -176,11 +177,30 @@ public class BookShelfFragment extends Fragment {
         mListener = null;
     }
 
+    /**
+     * @param isbn The book to check to if it is on the shelf
+     * @return True if the book is on the shelf, false otherwise
+     */
+    public boolean contains(String isbn) {
+
+        List<Book> list = mDb.bookDao().getAll();
+        for (Book b : list) { // check all the books in the current shelf
+            if (isbn.equals(b.mISBN)) // if we find the book that matches the isbn do not continue
+                return true; // instead we should tell the user that the book has already been added
+
+        }
+        return false;
+
+    }
+
     public void addBooktoShelf(Book book) {
         Log.v("addBookToShelf", "Adding book to the list");
         //TODO: Move saving into a separate non UI thread
-        mDb.bookDao().add(book);
-        mBookAdapter.add(book);
+        // only save and add to the list if it is not already present
+        if (!contains(book.mISBN)) {
+            mDb.bookDao().add(book);
+            mBookAdapter.add(book);
+        }
     }
 
 

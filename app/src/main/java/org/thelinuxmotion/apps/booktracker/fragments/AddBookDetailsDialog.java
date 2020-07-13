@@ -7,13 +7,14 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 
 import org.thelinuxmotion.apps.booktracker.R;
 

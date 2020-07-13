@@ -2,14 +2,17 @@ package org.thelinuxmotion.apps.booktracker.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.graphics.drawable.ColorDrawable;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.GridView;
-import android.widget.ImageView;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import org.thelinuxmotion.apps.booktracker.R;
 import org.thelinuxmotion.apps.booktracker.bookinfo.BookReadingDetails;
 
 import java.util.List;
@@ -36,39 +39,41 @@ public class HeatMapGridAdapter extends ArrayAdapter<BookReadingDetails> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        ImageView imageView;
+        TextView textView;
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
-            imageView = new ImageView(parent.getContext());
-            imageView.setLayoutParams(new GridView.LayoutParams(100, 100));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(8, 8, 8, 8);
-            imageView.setFocusable(false);
+            textView = (LayoutInflater.
+                    from(this.getContext()).inflate(R.layout.heatmap_adapter_layout, null)).
+                    findViewById(R.id.heatmap__grid_item);
+
         } else {
-            imageView = (ImageView) convertView;
+            textView = (TextView) convertView;
         }
 
         BookReadingDetails readingDetails = getItem(position);
 
         if (readingDetails != null){
 
+            textView.setText("" + readingDetails.mDay);
+            int color = Color.GREEN;
             long timespent = readingDetails.mTimeSpentReading;
             // We should actually interpolater from 0 to 60
             // with 30 being the green time
             //TODO: Add color interpolation/changing
-
             if (timespent >= 30)
-                imageView.setBackgroundColor(HeatMapColors.GREEN);
+                color = HeatMapColors.GREEN;
             else if (timespent >= 10)
-                imageView.setBackgroundColor(HeatMapColors.CYAN);
+                color = HeatMapColors.CYAN;
             else if (timespent > 0)
-                imageView.setBackgroundColor(HeatMapColors.YELLOW);
+                color = HeatMapColors.YELLOW;
             else
-                imageView.setBackgroundColor(HeatMapColors.BLUE);
+                color = HeatMapColors.BLUE;
+
+            textView.setBackground(new ColorDrawable(color));
         }
 
 
-        return imageView;
+        return textView;
 
     }
 

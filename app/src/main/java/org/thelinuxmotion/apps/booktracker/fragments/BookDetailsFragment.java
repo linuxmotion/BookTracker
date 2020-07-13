@@ -1,11 +1,9 @@
 package org.thelinuxmotion.apps.booktracker.fragments;
 
-import android.arch.persistence.room.Room;
+
+
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +14,11 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.room.Room;
 
 import com.squareup.picasso.Picasso;
 
@@ -153,6 +156,15 @@ public class BookDetailsFragment extends Fragment {
         for (int i = 0, j = 1; i < details.size(); i++) {
             Log.v(i + "", "Iteration #");
             BookReadingDetails b = details.get(i);// get the details for each pos
+            // if the book reading details are not from the same month then skip this detail
+            //
+            Calendar c = Calendar.getInstance();
+            int current_month = c.get(Calendar.MONTH);
+            c.setTimeInMillis(b.mDateTime);
+            int month = c.get(Calendar.MONTH);
+            if (current_month != month)
+                continue; // only display the current month
+            //
             Log.v(b.mDay + "", "Current day");
             int pos = b.mDay - 1;
 

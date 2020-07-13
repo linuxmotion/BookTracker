@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="calendarViewStyle" format="reference" />
+
+    <declare-styleable name="CalendarView">
+        <attr name="showWeekNumber" format="boolean" >false</attr>
+        <attr name="minDate" format="string" >01/01/1900</attr>>
+        <attr name="maxDate" format="string" >12/31/2100</attr>
+        <attr name="shownWeekCount" format="integer">6</attr>
+        <attr name="selectedWeekBackgroundColor" format="color">#330099FF</attr>
+        <attr name="focusedMonthDateColor" format="color">#FFFFFFFF</attr>
+        <attr name="unfocusedMonthDateColor" format="color">#66FFFFFF</attr>
+        <attr name="weekNumberColor" format="color">#33FFFFFF</attr>
+        <attr name="weekSeparatorLineColor" format="color">#19FFFFFF</attr>
+        <attr name="selectedDateVerticalBar" format="reference">@drawable/day_picker_week_view_dayline_holo</attr>
+        <attr name="firstDayOfWeek" format="integer">1</attr>
+    </declare-styleable>
+
+    <declare-styleable name="TextAppearance">
+        <attr name="Small" format="integer">12</attr>
+    </declare-styleable>
+</resources>

@@ -2,13 +2,14 @@ package org.thelinuxmotion.apps.booktracker;
 
 import android.icu.util.GregorianCalendar;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.EditText;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import org.thelinuxmotion.apps.booktracker.bookinfo.BookReadingDetails;
 import org.thelinuxmotion.apps.booktracker.fragments.AddBookDetailsDialog;
@@ -33,7 +34,7 @@ public class BookDetailsActivity extends AppCompatActivity implements AddBookDet
         // Initialize the book adapter
         Toolbar myToolbar = findViewById(R.id.my_toolbar);
 
-        setSupportActionBar(myToolbar);
+//        setSupportActionBar(myToolbar);
 
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -43,11 +44,11 @@ public class BookDetailsActivity extends AppCompatActivity implements AddBookDet
         fragmentTransaction.commit();
 
         // Get a support ActionBar corresponding to this toolbar
-        ActionBar ab = getSupportActionBar();
-        ab.setTitle(mBookFragment.getBook().mBookTitle);
+        //ActionBar ab = getSupportActionBar();
+       // ab.setTitle(mBookFragment.getBook().mBookTitle);
         // Enable the Up button
-        if (ab != null)
-            ab.setDisplayHomeAsUpEnabled(true);
+      //  if (ab != null)
+       //     ab.setDisplayHomeAsUpEnabled(true);
 
 
     }

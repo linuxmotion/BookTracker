@@ -7,11 +7,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 
@@ -83,7 +85,7 @@ public class AddBookDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
-                intent.setClass(getActivity(), org.thelinuxmotion.apps.booktracker.barcodereader.MainActivity.class);
+                intent.setClass(getActivity(), org.thelinuxmotion.apps.booktracker.barcodereader.BarcodeCameraActivity.class);
                 startActivityForResult(intent, CAMERA_ISBN);
             }
         });
@@ -136,11 +138,6 @@ public class AddBookDialogFragment extends DialogFragment {
         mListener = null;
     }
 
-    public void setISBN(String isbn) {
-
-        mISBN.setText(isbn);
-        notify();
-    }
 
     private static int CAMERA_ISBN = 0;
 
@@ -150,13 +147,19 @@ public class AddBookDialogFragment extends DialogFragment {
 
         if (requestCode == CAMERA_ISBN) {
             // do some stuff with the retrning class being the camera sibn
-            if (requestCode == CommonStatusCodes.SUCCESS) {
-
+            if ( (resultCode == CommonStatusCodes.SUCCESS)   ) {
+                // If we have and error or succes still show the barcode
+                // the next screen will determine if is valid or not
                 String barcode = data.getStringExtra(BarcodeCaptureActivity.BarcodeObject);
                 mISBN.setText(barcode);
 
-            } else if (requestCode == CommonStatusCodes.CANCELED) {
+            }else if ((resultCode == CommonStatusCodes.ERROR)){
 
+                // If data is null we probably pressed the back button
+                if(data != null){
+                     String barcode = data.getStringExtra(BarcodeCaptureActivity.BarcodeObject);
+                     mISBN.setText(barcode);
+                }
 
             }
 

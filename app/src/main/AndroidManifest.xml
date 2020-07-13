@@ -1,51 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="org.thelinuxmotion.apps.booktracker">
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:allowBackup="true"
+
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        android:theme="@style/Theme.AppCompat.Light"
+        tools:ignore="GoogleAppIndexingWarning">
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="barcode" />
-        <activity android:name=".MainActivity">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
-        <activity android:name=".BookDetailsActivity"
-                  android:parentActivityName=".MainActivity">
+        <activity
+            android:name=".BookShelfActivity"
+            android:screenOrientation="fullSensor">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity
-            android:name=".barcodereader.MainActivity"
-            android:parentActivityName=".MainActivity">
+            android:name=".BookDetailsActivity"
+            android:parentActivityName=".BookShelfActivity"
+            android:screenOrientation="fullSensor">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".BookShelfActivity" />
+        </activity>
+
+        <activity
+            android:name=".barcodereader.BarcodeCameraActivity"
+            android:parentActivityName=".BookShelfActivity"
+            android:screenOrientation="fullSensor">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".BookShelfActivity" />
         </activity>
 
         <activity
             android:name=".barcodereader.BarcodeCaptureActivity"
-            android:parentActivityName=".MainActivity">
-
+            android:parentActivityName=".BookShelfActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".BookShelfActivity" />
+        </activity>
+
+
+        <activity android:name=".CalendarAppTest">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 
